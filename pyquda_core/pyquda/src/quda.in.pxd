@@ -655,6 +655,14 @@ cdef extern from "quda.h":
                                   int nvector, double multiplicity, void *, QudaGaugeParam *gauge_param,
                                   QudaInvertParam *inv_param)
     #
+    # Compute a general-link clover force from explicit even/odd spinor pairs.
+    # This is used by Hasenbusch ratio terms where the Chroma-style derivative
+    # is assembled from several independent bilinear pairs.
+    #
+    void computeCloverPairForceV2Quda(void *h_force, void **h_x_even, void **h_x_odd, void **h_p_even,
+                                      void **h_p_odd, double *coeff, double *epsilon_even, double *epsilon_odd,
+                                      int nvector, QudaGaugeParam *gauge_param, QudaInvertParam *inv_param)
+    #
     # Compute the clover force contributions from a set of partial
     # fractions stemming from a rational approximation suitable for use
     # within MILC.
@@ -692,6 +700,8 @@ cdef extern from "quda.h":
     #
     void computeTMCloverForceQuda(void *h_mom, void **h_x, void **h_x0, double *coeff, int nvector,
                                   QudaGaugeParam *gauge_param, QudaInvertParam *inv_param, int detratio)
+    void computeTMCloverForceV2Quda(void *h_force, void **h_x, void **h_x0, double *coeff, int nvector,
+                                    QudaGaugeParam *gauge_param, QudaInvertParam *inv_param, int detratio)
 
     #
     # Compute the naive staggered force.  All fields must be in the same precision.
@@ -978,6 +988,4 @@ cdef extern from "quda.h":
     #
     void laphSinkProject(double_complex *host_sinks, void **host_quark, int n_quark, int tile_quark,
                         void **host_evec, int nevec, int tile_evec, QudaInvertParam *inv_param, const int X[4])
-
-
 

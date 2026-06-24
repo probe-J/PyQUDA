@@ -233,11 +233,11 @@ class HMC:
         self.obs_param = QudaGaugeObservableParam()
         self.obs_param.remove_staggered_phase = QudaBoolean(self.is_staggered)
         self.fuseFermionAction()
-        self.gauge = LatticeGauge(latt_info)
-        self.smeared = LatticeGauge(latt_info)
-        self.mom = LatticeMom(latt_info)
-        self.force = LatticeMom(latt_info)
-        self.force_v2 = LatticeGauge(latt_info)
+        self.gauge = None
+        self.smeared = None
+        self.mom = None
+        self.force = None
+        self.force_v2 = None
 
     def fuseFermionAction(self):
         if self.is_staggered:
@@ -269,9 +269,13 @@ class HMC:
         self.smeared = LatticeGauge(self.latt_info)
         self.mom = LatticeMom(self.latt_info)
         self.force = LatticeMom(self.latt_info)
+        self.force_v2 = LatticeGauge(self.latt_info)
+        if self.hmc_inner is not None:
+            self.hmc_inner.initializeFields()
 
     def initialize(self, seed: int, gauge: LatticeGauge, mom: Optional[LatticeMom] = None):
         self.initializeRNG(seed)
+        self.initializeFields()
         self.loadGauge(gauge)
         if mom is None:
             self.loadMom(LatticeMom(gauge.latt_info))
@@ -281,6 +285,8 @@ class HMC:
     def setFermionVerbosity(self, verbosity: QudaVerbosity):
         for fermion_monomial in self.fermion_monomials:
             fermion_monomial.setVerbosity(verbosity)
+        if self.hmc_inner is not None:
+            self.hmc_inner.setFermionVerbosity(verbosity)
 
     def _stoutSmear(self):
         # import os
@@ -398,7 +404,13 @@ class HMC:
 
             self.mom += self.force
 
+            # stout force 回传后，host momentum 已经累加 thin-link force；
+            # 这里显式按 host->resident 方向刷新 QUDA momentum，和 loadMom() 语义一致。
+            self.gauge_param.use_resident_mom = 0
+            self.gauge_param.make_resident_mom = 1
+            self.gauge_param.return_result_mom = 0
             momResidentQuda(self.mom.data_ptrs, self.gauge_param)
+            self.gauge_param.use_resident_mom = 1
 
     def seed(self, state):
         seed = self.random.randrange(2**32)
@@ -421,13 +433,18 @@ class HMC:
         self.loadGaugeMomSmeared()
         for monomial in self.fermion_monomials:
             monomial.sample()
+        self.loadGaugeMom()
         if self.hmc_inner is not None:
             self.hmc_inner.samplePhi()
-        self.loadGaugeMom()
 
         self.seed(state)
 
     def momAction(self) -> float:
+        # momActionQuda(nullptr, ...) 依赖 resident momentum；这里显式固定 flag，
+        # 避免前一次 save/load mom 后 use_resident_mom 状态遗留导致读到空 host 指针。
+        self.gauge_param.use_resident_mom = 1
+        self.gauge_param.make_resident_mom = 1
+        self.gauge_param.return_result_mom = 0
         return momActionQuda(nullptr, self.gauge_param)
 
     def gaugeAction(self) -> float:
@@ -446,9 +463,9 @@ class HMC:
         self.loadGaugeMomSmeared()
         for monomial in self.fermion_monomials:
             action += monomial.action()  # if not use_action_param else monomial.actionFA()
+        self.loadGaugeMom()
         if self.hmc_inner is not None:
             action += self.hmc_inner.fermionAction()
-        self.loadGaugeMom()
         return action
 
     def gaugeForce(self, dt: float):
@@ -491,18 +508,31 @@ class HMC:
             gauge.staggeredPhase(True)
 
     def loadMom(self, mom: LatticeMom):
+        # 从 host momentum 写入 QUDA resident momentum，并让后续 updateGauge/momAction 使用 resident。
+        self.gauge_param.use_resident_mom = 0
+        self.gauge_param.make_resident_mom = 1
+        self.gauge_param.return_result_mom = 0
         momResidentQuda(mom.data_ptrs, self.gauge_param)
+        self.gauge_param.use_resident_mom = 1
 
     def saveMom(self, mom: LatticeMom):
+        # momResidentQuda 在 return_result_mom 分支会清空 resident；读回 host 后立刻 reload，
+        # 保证 saveMom 只是“保存副本”，不会改变 HMC 后续仍使用 resident momentum 的状态。
+        self.gauge_param.use_resident_mom = 1
         self.gauge_param.make_resident_mom = 0
         self.gauge_param.return_result_mom = 1
         momResidentQuda(mom.data_ptrs, self.gauge_param)
         self.gauge_param.make_resident_mom = 1
         self.gauge_param.return_result_mom = 0
         momResidentQuda(mom.data_ptrs, self.gauge_param)  # keep momResident
+        self.gauge_param.use_resident_mom = 1
 
     def gaussMom(self):
         gaussMomQuda(self.random.randrange(2**32), 1.0)
+        # gaussMomQuda 生成的是 resident momentum，后续动作都应从 resident 读取。
+        self.gauge_param.use_resident_mom = 1
+        self.gauge_param.make_resident_mom = 1
+        self.gauge_param.return_result_mom = 0
 
     def projectSU3(self, tol: float):
         gauge = LatticeGauge(self.latt_info)

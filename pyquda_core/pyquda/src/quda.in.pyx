@@ -375,11 +375,42 @@ def computeCloverForceV2Quda(force, double dt, x, ndarray[double, ndim=1] coeff,
     _coeff = _NDArray(coeff)
     quda.computeCloverForceV2Quda(_force.ptr, dt, _x.ptrs, NULL, <double *>_coeff.ptr, kappa2, ck, nvector, multiplicity, NULL, &gauge_param.param, &inv_param.param)
 
+def computeCloverPairForceV2Quda(force, x_even, x_odd, p_even, p_odd, ndarray[double, ndim=1] coeff, ndarray[double, ndim=1] epsilon_even, ndarray[double, ndim=1] epsilon_odd, int nvector, QudaGaugeParam gauge_param, QudaInvertParam inv_param):
+    # 只封装 QUDA 的显式 spinor-pair force；Hasenbusch ratio 的四项符号由 Python action 组织。
+    _force = _NDArray(force, 2)
+    _x_even = _NDArray(x_even, 2)
+    _x_odd = _NDArray(x_odd, 2)
+    _p_even = _NDArray(p_even, 2)
+    _p_odd = _NDArray(p_odd, 2)
+    _coeff = _NDArray(coeff)
+    _epsilon_even = _NDArray(epsilon_even)
+    _epsilon_odd = _NDArray(epsilon_odd)
+    quda.computeCloverPairForceV2Quda(
+        _force.ptr,
+        _x_even.ptrs,
+        _x_odd.ptrs,
+        _p_even.ptrs,
+        _p_odd.ptrs,
+        <double *>_coeff.ptr,
+        <double *>_epsilon_even.ptr,
+        <double *>_epsilon_odd.ptr,
+        nvector,
+        &gauge_param.param,
+        &inv_param.param,
+    )
+
 def computeCloverForceQuda(mom, double dt, x, ndarray[double, ndim=1] coeff, double kappa2, double ck, int nvector, double multiplicity, QudaGaugeParam gauge_param, QudaInvertParam inv_param):
     _mom = _NDArray(mom, 2)
     _x = _NDArray(x, 2)
     _coeff = _NDArray(coeff)
     quda.computeCloverForceQuda(_mom.ptr, dt, _x.ptrs, NULL, <double *>_coeff.ptr, kappa2, ck, nvector, multiplicity, NULL, &gauge_param.param, &inv_param.param)
+
+def computeTMCloverForceV2Quda(force, x, x0, ndarray[double, ndim=1] coeff, int nvector, QudaGaugeParam gauge_param, QudaInvertParam inv_param, int detratio):
+    _force = _NDArray(force, 2)
+    _x = _NDArray(x, 2)
+    _x0 = _NDArray(x0, 2)
+    _coeff = _NDArray(coeff)
+    quda.computeTMCloverForceV2Quda(_force.ptr, _x.ptrs, _x0.ptrs, <double *>_coeff.ptr, nvector, &gauge_param.param, &inv_param.param, detratio)
 
 # void computeStaggeredForceQuda(void *mom, double dt, double delta, void *gauge, void **x, QudaGaugeParam *gauge_param, QudaInvertParam *invert_param)
 
