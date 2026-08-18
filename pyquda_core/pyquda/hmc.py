@@ -129,6 +129,38 @@ class O2Nf2Ng0P(Integrator):
         updateGauge(self.lambda_ * dt)
 
 
+class STSForceGrad(Integrator):
+    R"""Chroma ``LCM_STS_FORCE_GRAD`` 的递归 STS force-gradient 积分器。
+
+    使用 arXiv:1111.5059 的 shifted-force 实现，不显式构造 Hessian。当前层负责
+    ``updateMom``，子层负责半步演化；临时 gauge/momentum 的保存与恢复由 HMC 提供。
+    """
+
+    lambda_ = 1.0 / 6.0
+    xi_ = 1.0 / 72.0
+
+    def integrate(self, updateGauge, updateMom, t: float, forceGradient=None):
+        if forceGradient is None:
+            raise ValueError("STSForceGrad requires an HMC forceGradient callback")
+        dt = t / self.n_steps
+        lambda_dt = self.lambda_ * dt
+        half_dt = dt / 2.0
+        middle_dt = (1.0 - 2.0 * self.lambda_) * dt
+        double_lambda_dt = 2.0 * lambda_dt
+        shifted_force_dt = 2.0 * dt**3 * self.xi_ / middle_dt
+
+        updateMom(lambda_dt)
+        for _ in range(self.n_steps - 1):
+            updateGauge(half_dt)
+            forceGradient(shifted_force_dt, middle_dt)
+            updateGauge(half_dt)
+            updateMom(double_lambda_dt)
+        updateGauge(half_dt)
+        forceGradient(shifted_force_dt, middle_dt)
+        updateGauge(half_dt)
+        updateMom(lambda_dt)
+
+
 class O4Nf5Ng0V(Integrator):
     R"""https://doi.org/10.1016/S0010-4655(02)00754-3
     BABABABABAB: Eq.(63), Eq.(71)"""
@@ -206,6 +238,11 @@ class HMC:
         monomials: List[Union[Action, FermionAction, StaggeredFermionAction]],
         integrator: Integrator,
         hmc_inner: Optional["HMC"] = None,
+        *,
+        stout_n_smear: int = 1,
+        stout_rho: float = 0.125,
+        stout_dir_ignore: int = 4,
+        stout_smear_anisotropy: float = 1.0,
     ) -> None:
         self.latt_info = latt_info
         self.gauge_monomials: List[Action] = [
@@ -216,6 +253,27 @@ class HMC:
         ]
         self.integrator = integrator
         self.hmc_inner = hmc_inner
+        # HMC stout reverse 当前一次只回传一层；禁止把多层 forward 误配给单层 reverse。
+        if stout_n_smear != 1:
+            raise NotImplementedError("HMC stout force reverse currently supports exactly one smear level")
+        if stout_dir_ignore not in (3, 4):
+            raise ValueError("HMC stout_dir_ignore must be 3 (S3) or 4 (S4)")
+        if not numpy.isfinite(stout_rho) or not numpy.isfinite(stout_smear_anisotropy):
+            raise ValueError("stout_rho and stout_smear_anisotropy must be finite")
+        if stout_smear_anisotropy != 1.0:
+            raise NotImplementedError("HMC stout reverse currently supports isotropic rho only")
+        self.stout_n_smear = int(stout_n_smear)
+        self.stout_rho = float(stout_rho)
+        self.stout_dir_ignore = int(stout_dir_ignore)
+        self.stout_smear_anisotropy = float(stout_smear_anisotropy)
+        self.stout_config = (
+            self.stout_n_smear,
+            self.stout_rho,
+            self.stout_dir_ignore,
+            self.stout_smear_anisotropy,
+        )
+        if hmc_inner is not None and hmc_inner.stout_config != self.stout_config:
+            raise ValueError("outer and inner HMC must use the same stout forward/reverse configuration")
         if len(self.fermion_monomials) == 0:
             self.is_staggered = False
         else:
@@ -307,7 +365,11 @@ class HMC:
         # self._stout_smear((Lx * Ly * Lz // 2, dim, 2), (Lt, 1, 1), (smeared, gauge, rho, Lx, Ly, Lz, Lt))
         # self.smeared.data = smeared
 
-        self.smeared.stoutSmear(1, 0.125, 4)
+        self.smeared.stoutSmear(
+            self.stout_n_smear,
+            self.stout_rho,
+            self.stout_dir_ignore,
+        )
 
     def _stoutSmearReverse(self):
         # import os
@@ -342,8 +404,10 @@ class HMC:
 
         smear_param = quda.QudaGaugeSmearParam()
         smear_param.smear_type = 1
-        smear_param.rho = 0.125
-        smear_param.dir_ignore = 4
+        smear_param.n_steps = self.stout_n_smear
+        smear_param.rho = self.stout_rho
+        smear_param.dir_ignore = self.stout_dir_ignore
+        smear_param.smear_anisotropy = self.stout_smear_anisotropy
         self.gauge_param.use_resident_force = 0
         self.gauge_param.return_result_force = 1
         self.gauge_param.overwrite_force = 0
@@ -475,8 +539,10 @@ class HMC:
     def fermionForce(self, dt: float):
         self.loadGaugeMomSmeared()
         for monomial in self.fermion_monomials:
-            # monomial.force(dt, self.force)
-            monomial.force_v2(dt, self.force_v2)
+            # 各 action 的 V2 接口对 dt 的历史处理不一致：普通 Clover 会在
+            # QUDA 内部缩放，Hasenbusch/logdet 则返回未缩放导数。统一要求这里
+            # 先累计 dS/dV，再在 stout reverse 前只乘一次真实积分步长。
+            monomial.force_v2(1.0, self.force_v2)
         self.force_v2 *= dt
 
         self.loadGaugeMom()
@@ -489,6 +555,23 @@ class HMC:
             self.gaugeForce(dt)
         if fermion:
             self.fermionForce(dt)
+
+    def forceGradient(self, shifted_force_dt: float, momentum_dt: float):
+        """在临时 shifted gauge 上重算当前时间尺度的 force，并恢复原始规范场。"""
+        gauge_saved = LatticeGauge(self.latt_info)
+        mom_saved = LatticeMom(self.latt_info)
+        self.saveGauge(gauge_saved)
+        self.saveMom(mom_saved)
+
+        # P=0 后先生成 shifted gauge U'=exp(shifted_force_dt*F[U])U。
+        self.loadMom(LatticeMom(self.latt_info))
+        self.updateMom(shifted_force_dt)
+        self.updateGauge(1.0)
+
+        # 在 U' 上把当前层 force 累加到原动量，再恢复 U；pseudofermion 保持不变。
+        self.loadMom(mom_saved)
+        self.updateMom(momentum_dt)
+        self.loadGauge(gauge_saved)
 
     def loadGauge(self, gauge: LatticeGauge):
         gauge_in = gauge.copy()
@@ -541,9 +624,11 @@ class HMC:
         self.loadGauge(gauge)
 
     def integrate(self, t: float, project_tol: float = 0.0):
-        self.integrator.integrate(
-            self.updateGauge if self.hmc_inner is None else self.hmc_inner.integrate, self.updateMom, t
-        )
+        update_gauge = self.updateGauge if self.hmc_inner is None else self.hmc_inner.integrate
+        if isinstance(self.integrator, STSForceGrad):
+            self.integrator.integrate(update_gauge, self.updateMom, t, self.forceGradient)
+        else:
+            self.integrator.integrate(update_gauge, self.updateMom, t)
         if project_tol > 0.0:
             self.projectSU3(project_tol)
 
