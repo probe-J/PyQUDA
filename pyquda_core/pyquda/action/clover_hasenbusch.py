@@ -162,6 +162,8 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
         maxiter: int,
         clover_csw: float,
         *,
+        md_tol: Optional[float] = None,
+        action_tol: Optional[float] = None,
         determinant_ratio: bool = False,
         constdet: bool = False,
         mu_prec: Optional[float] = None,
@@ -184,6 +186,9 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
         self.mass = mass
         self.mu = mu
         self.mu_prec = mu_prec
+        # Chroma 分别配置 MD force/refresh 与接受 Hamiltonian 的残差目标。
+        self.md_tol = float(tol if md_tol is None else md_tol)
+        self.action_tol = float(tol if action_tol is None else action_tol)
         self.determinant_ratio = determinant_ratio
         # Chroma 的 multihasen cancel 使用 const-det 预条件化：不包含 clover trlog/sigma-trace。
         self.constdet = constdet
@@ -214,17 +219,29 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
             )
         self.matpc_type_label = matpc_type
         self.matpc_type = matpc_map[matpc_type]
+        if matpc_type == "even_even":
+            raise NotImplementedError(
+                "symmetric even_even Hasenbusch force is not implemented; use odd_odd or an asymmetric MatPC"
+            )
+        if not determinant_ratio and not constdet and matpc_type == "odd_odd":
+            raise NotImplementedError(
+                "non-constdet symmetric odd_odd action has no validated clover trlog decomposition"
+            )
         if self.determinant_ratio and self.mu_prec is None:
             getLogger().critical("determinant_ratio=True requires mu_prec", ValueError)
         if self.determinant_ratio and self.constdet:
             getLogger().critical("determinant_ratio and constdet cannot both be True", ValueError)
         if self.ratio_force_source not in ("phi", "rhs"):
             getLogger().critical("ratio_force_source must be 'phi' or 'rhs'", ValueError)
-        if self.ratio_force_mode not in ("quda_detratio", "pair", "pc_pair", "pc_quda_twist", "pc_quda_norm", "pc_quda_norm_chroma4"):
+        if self.ratio_force_mode not in ("quda_detratio", "pair", "pc_pair", "pc_quda_twist", "pc_quda_norm"):
             getLogger().critical(
-                "ratio_force_mode must be quda_detratio, pair, pc_pair, pc_quda_twist, pc_quda_norm or pc_quda_norm_chroma4",
+                "ratio_force_mode must be quda_detratio, pair, pc_pair, pc_quda_twist or pc_quda_norm",
                 ValueError,
             )
+        # QUDA detratio 接口的 x0 有固定含义：它必须是 ratio 的源 pseudofermion phi，
+        # 不能把求解右端 rhs 当作 x0；rhs 只属于 Python 侧的显式 PC 展开诊断。
+        if self.ratio_force_mode == "quda_detratio" and self.ratio_force_source != "phi":
+            raise ValueError("quda_detratio requires ratio_force_source='phi'; rhs is not a valid QUDA x0")
         if self.cancel_force_mode not in ("quda_tmclover", "pc_pair", "pc_constdet", "pc_quda_twist", "pc_quda_norm"):
             getLogger().critical(
                 "cancel_force_mode must be quda_tmclover, pc_pair, pc_constdet, pc_quda_twist or pc_quda_norm",
@@ -300,12 +317,16 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
 
     def _solve(self, rhs: Optional[LatticeFermion] = None, mu: Optional[float] = None, compute_action: bool = False):
         old_mu = self.invert_param.mu
+        old_tol = self.invert_param.tol
         if mu is not None:
             self.invert_param.mu = mu
+        # action 用严格残差保证 Metropolis 能量；refresh/force 使用头文件的 MD 残差。
+        self.invert_param.tol = self.action_tol if compute_action else self.md_tol
         self.invert_param.compute_action = int(compute_action)
         invertQuda(self.quark[0].even_ptr, (rhs or self.phi).even_ptr, self.invert_param)
         self.dirac.performance()
         self.invert_param.compute_action = 0
+        self.invert_param.tol = old_tol
         self.invert_param.mu = old_mu
 
     def sample(self):
@@ -341,7 +362,9 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
             self._solve(self.phi, self.mu, compute_action=True)
             action = self.invert_param.action[0] - self.latt_info.volume // 2 * self.latt_info.Ns * self.latt_info.Nc
             if not self.constdet:
-                action -= self.multiplicity * self.invert_param.trlogA[1]
+                # asymmetric Schur complement 要补回被消去 checkerboard 的 clover determinant。
+                trlog_index = 1 if self._active_parity() == QudaParity.QUDA_EVEN_PARITY else 0
+                action -= self.multiplicity * self.invert_param.trlogA[trlog_index]
             return action
 
     def _parity_field(self, field: LatticeFermion, parity: QudaParity) -> LatticeFermion:
@@ -770,19 +793,52 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 include_hopping=False,
             )
 
-        active_mu = self.invert_param.mu
-        if include_shift and active_mu != 0.0:
-            # Chroma shifted_linop_w.h: ratio 的 D_prec 分支需使用当前 active mu=mu_prec。
-            twist_scale = -active_mu if plus else active_mu
-            self._i_gamma5_parity(self.pc_tmp1, chi_odd, QudaParity.QUDA_ODD_PARITY, twist_scale)
-            self._add_pair_force_v2(
+        if include_shift:
+            self._add_symmetric_shift_deriv_force(
                 force,
-                self._parity_field(self.pc_tmp1, QudaParity.QUDA_ODD_PARITY),
+                chi_odd,
                 psi_odd,
-                sign * self.sym_odd_clover_scale,
+                dagger,
+                sign,
                 f"{label}: sym shifted i_mu_gamma5_A_oo prime",
-                include_hopping=False,
+                self.sym_odd_clover_scale,
             )
+
+    def _add_symmetric_shift_deriv_force(
+        self,
+        force: LatticeGauge,
+        chi_odd: LatticeFermion,
+        psi_odd: LatticeFermion,
+        dagger: QudaDagType,
+        sign: float,
+        label: str,
+        scale: float = 1.0,
+    ) -> None:
+        """加入 symmetric odd-odd 中 ``delta[(+-) i mu gamma5 A_oo / 2]`` 的单项导数。
+
+        该项只对 active odd clover block 求导。dagger 分支的共轭双线性由
+        ``computeCloverPairForceV2Quda`` 的左右场约定处理；这里显式保留
+        dagger 对应的 shift 符号，避免把 ``mu_prec`` 或相反符号静态写死。
+        """
+        active_mu = self.invert_param.mu
+        if active_mu == 0.0:
+            return
+        plus = dagger == QudaDagType.QUDA_DAG_NO
+        shift_alpha = (-active_mu if plus else active_mu) * scale
+        self._i_gamma5_parity(
+            self.pc_tmp1,
+            chi_odd,
+            QudaParity.QUDA_ODD_PARITY,
+            shift_alpha,
+        )
+        self._add_pair_force_v2(
+            force,
+            self._parity_field(self.pc_tmp1, QudaParity.QUDA_ODD_PARITY),
+            psi_odd,
+            sign,
+            label,
+            include_hopping=False,
+        )
 
     def _add_pair_force_v2_quda_norm(
         self,
@@ -974,8 +1030,9 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
             )
 
         if active_mu != 0.0:
-            # shift = (±active_mu/2) * i gamma5 A psi；把 i gamma5 和 shift 系数并入左矢量。
-            self._i_gamma5_parity(self.pc_tmp1, chi_odd, QudaParity.QUDA_ODD_PARITY, -shift_alpha)
+            # shift = (plus/minus mu/2) i gamma5 A_oo；dagger 分支交换双线性左右场。
+            shift_alpha *= -1.0
+            self._i_gamma5_parity(self.pc_tmp1, chi_odd, QudaParity.QUDA_ODD_PARITY, shift_alpha)
             self._add_pair_force_v2_quda_norm(
                 force,
                 self._parity_field(self.pc_tmp1, QudaParity.QUDA_ODD_PARITY),
@@ -1113,7 +1170,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 self._add_eoprec_deriv_force(force_out, self.quark[0], self.y, QudaDagType.QUDA_DAG_YES, -1.0, "-D(X,Y)", include_quda_twist)
                 self._add_eoprec_deriv_force(force_out, self.y, self.quark[0], QudaDagType.QUDA_DAG_NO, -1.0, "-D(Y,X)", include_quda_twist)
             self.invert_param.mu = old_mu_for_pc
-        elif self.determinant_ratio and force_out is not None and self.ratio_force_mode in ("pc_quda_norm", "pc_quda_norm_chroma4"):
+        elif self.determinant_ratio and force_out is not None and self.ratio_force_mode == "pc_quda_norm":
             if not self._is_symmetric_matpc():
                 getLogger().critical("pc_quda_norm ratio requires symmetric odd_odd/even_even MatPC", NotImplementedError)
             old_mu_for_pc = self.invert_param.mu
@@ -1121,8 +1178,8 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
             # pc_quda_norm 必须完整保留 dagger 与 non-dagger 两边，不能只用 PLUS 半边近似。
             # 这里底层 helper 返回 dS/dU；HMC.loadGaugeMom 会把 force_v2 直接加到动量，
             # 因此 determinant-ratio monomial 的动量力需要整体取 -dS/dU。
-            label_prefix = "D_prec chroma4" if self.ratio_force_mode == "pc_quda_norm_chroma4" else "D_prec quda-kernel"
-            d_label_prefix = "D chroma4" if self.ratio_force_mode == "pc_quda_norm_chroma4" else "D quda-kernel"
+            label_prefix = "D_prec symmetric"
+            d_label_prefix = "D symmetric"
             self.invert_param.mu = self.mu_prec
             self._add_sym_oddodd_quda_norm_deriv_force(
                 force_out,
