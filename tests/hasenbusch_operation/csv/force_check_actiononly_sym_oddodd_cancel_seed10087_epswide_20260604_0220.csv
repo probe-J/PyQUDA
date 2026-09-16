@@ -1,0 +1,4 @@
+run_id,cfg,subset,shift_chain,eps,S_plus,S_minus,finite_difference,force_dot_direction,host_force_dot_direction,host_weighted_force_dot_direction,fd_minus_force_dot,fd_plus_force_dot,relative_error_same_sign,relative_error_opposite_sign,direction_norm,force_norm
+actiononly_sym_oddodd_cancel_seed10087_epswide_20260604_0220,1000,cancel_only,"0.0,0.0005,0.0015,0.0035,0.0075,0.0155",1e-05,4302.520964925861,4302.499439048031,1076.2938915377163,nan,nan,nan,nan,nan,nan,nan,1051.5390333231248,nan
+actiononly_sym_oddodd_cancel_seed10087_epswide_20260604_0220,1000,cancel_only,"0.0,0.0005,0.0015,0.0035,0.0075,0.0155",3e-05,4302.540925897434,4302.478858884393,1034.4502173514531,nan,nan,nan,nan,nan,nan,nan,1051.5390333231248,nan
+actiononly_sym_oddodd_cancel_seed10087_epswide_20260604_0220,1000,cancel_only,"0.0,0.0005,0.0015,0.0035,0.0075,0.0155",0.0001,4302.616436833598,4302.408197323861,1041.1975486840674,nan,nan,nan,nan,nan,nan,nan,1051.5390333231248,nan

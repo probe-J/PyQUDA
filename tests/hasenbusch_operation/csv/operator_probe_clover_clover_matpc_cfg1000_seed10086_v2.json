@@ -1,0 +1,15 @@
+{
+  "run_id": "clover_matpc_cfg1000_seed10086_v2",
+  "cfg": "1000",
+  "seed": 10086,
+  "mass": -2.3999999999999999e-01,
+  "matpc_type": "odd_odd",
+  "expected_chroma_base_coeff": -2.5000000000000000e-01,
+  "fit": {
+    "coeff_real": -1.7683340878225453e-02,
+    "coeff_imag": 9.1631668110017612e-22,
+    "relative_residual": 7.0387364339914679e-16,
+    "target_norm": 1.9577559443750698e+02,
+    "base_norm": 1.1071188175678788e+04
+  }
+}

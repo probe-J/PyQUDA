@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+
+<Params>
+  <MCControl>
+<Cfg>
+  <cfg_type>SZINQIO</cfg_type>
+  <cfg_file>rngB_chroma_cfg_1.lime</cfg_file>
+  <parallel_io>false</parallel_io>
+  <reunit>true</reunit>
+</Cfg>
+    <RNG>
+      <Seed>
+        <elem>3350</elem>
+        <elem>2100</elem>
+        <elem>376</elem>
+        <elem>1211</elem>
+      </Seed>
+    </RNG>
+    <StartUpdateNum>1</StartUpdateNum>
+    <NWarmUpUpdates>0</NWarmUpUpdates>
+    <NProductionUpdates>1</NProductionUpdates>
+    <NUpdatesThisRun>0</NUpdatesThisRun>
+    <SaveInterval>1</SaveInterval>
+    <SavePrefix>rngB_chroma</SavePrefix>
+    <SaveVolfmt>SINGLEFILE</SaveVolfmt>
+    <ParallelIO>false</ParallelIO>
+    <ReproCheckP>false</ReproCheckP>
+    <ReverseCheckP>true</ReverseCheckP>
+    <ReverseCheckFrequency>10</ReverseCheckFrequency>
+    <MonitorForces>true</MonitorForces><InlineMeasurements>
+      <elem>
+        <Name>PLAQUETTE</Name>
+        <Frequency>1</Frequency>
+        <Param>
+          <version>2</version>
+          <GaugeState>
+            <Name>SIMPLE_GAUGE_STATE</Name>
+            <GaugeBC>
+              <Name>PERIODIC_GAUGEBC</Name>
+            </GaugeBC>
+          </GaugeState>
+        </Param>
+        <NamedObject>
+          <gauge_id>default_gauge_field</gauge_id>
+        </NamedObject>
+      </elem>
+    </InlineMeasurements>
+</MCControl>
+  <HMCTrj>
+    <nrow>24 24 24 64</nrow><Monomials>
+      <elem>
+        <Name>GAUGE_MONOMIAL</Name>
+        <GaugeAction>
+          <Name>LW_1LOOP_GAUGEACT</Name>
+          <beta>6.2</beta>
+          <u0>0.855453</u0>
+          <GaugeBC>
+            <Name>PERIODIC_GAUGEBC</Name>
+          </GaugeBC>
+        </GaugeAction>
+        <NamedObject>
+          <monomial_id>HMC::gauge</monomial_id>
+        </NamedObject>
+      </elem>
+    </Monomials>
+<Hamiltonian>
+      <monomial_ids>
+        <elem>HMC::gauge</elem>
+      </monomial_ids>
+    </Hamiltonian>
+<MDIntegrator>
+      <tau0>0.1</tau0>
+      <Integrator>
+        <Name>LCM_STS_LEAPFROG</Name>
+        <n_steps>28</n_steps>
+        <monomial_ids>
+          <elem>HMC::gauge</elem>
+        </monomial_ids>
+      </Integrator>
+    </MDIntegrator>
+</HMCTrj>
+</Params>

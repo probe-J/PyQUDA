@@ -1,0 +1,2 @@
+run_id,cfg,subset,shift_chain,eps,S_plus,S_minus,finite_difference,force_dot_direction,host_force_dot_direction,host_weighted_force_dot_direction,fd_minus_force_dot,fd_plus_force_dot,relative_error_same_sign,relative_error_opposite_sign,direction_norm,force_norm
+forcefd_ratio_pair1_pc_pair_seed10086_20260604e,1000,ratio_only,"0.0005,0.0015",3e-05,331329.88164682384,331329.88164672523,0.001643396293123563,-1.33618715083648,-1.3457633657757722,-1.3361871508366572,1.3378305471296035,-1.3345437545433565,1.0012299147556498,0.9987700852443502,1051.4280482037552,3.494693564461134

@@ -1,0 +1,1 @@
+run_id,cfg,subset,monomial_index,monomial_label,eps,S_plus,S_minus,finite_difference,force_dot_direction,fd_plus_force_dot,relative_error_opposite_sign,force_norm

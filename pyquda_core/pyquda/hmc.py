@@ -129,6 +129,24 @@ class O2Nf2Ng0P(Integrator):
         updateGauge(self.lambda_ * dt)
 
 
+class STSLeapfrog(Integrator):
+    R"""Chroma LCM_STS_LEAPFROG 的递归 STS leapfrog 积分器。
+
+    当前层负责 updateMom，子层通过 updateGauge 演化。该类用于
+    与 Chroma 的无 force-gradient 积分器做逐步隔离对拍。
+    """
+
+    def integrate(self, updateGauge, updateMom, t: float):
+        dt = t / self.n_steps
+        half_dt = dt / 2.0
+        updateMom(half_dt)
+        for _ in range(self.n_steps - 1):
+            updateGauge(dt)
+            updateMom(dt)
+        updateGauge(dt)
+        updateMom(half_dt)
+
+
 class STSForceGrad(Integrator):
     R"""Chroma ``LCM_STS_FORCE_GRAD`` 的递归 STS force-gradient 积分器。
 

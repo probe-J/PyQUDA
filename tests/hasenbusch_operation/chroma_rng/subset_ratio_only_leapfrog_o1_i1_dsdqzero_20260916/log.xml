@@ -1,0 +1,3059 @@
+<?xml version="1.0"?>
+
+
+<hmc>
+  <Input><Params>
+  <MCControl>
+    <Cfg>
+      <cfg_type>SZINQIO</cfg_type>
+      <cfg_file>/home/jyg/stout_smear/test_stout_smesr/2ml_1ms_lime/beta6.20_mu-0.2790_ms-0.2400_L24x64_cfg_5000.lime</cfg_file>
+      <parallel_io>false</parallel_io>
+    </Cfg>
+    <RNG>
+      <Seed>
+        <elem>2094</elem>
+        <elem>850</elem>
+        <elem>1</elem>
+        <elem>0</elem>
+      </Seed>
+    </RNG>
+    <StartUpdateNum>0</StartUpdateNum>
+    <NWarmUpUpdates>0</NWarmUpUpdates>
+    <NProductionUpdates>1</NProductionUpdates>
+    <NUpdatesThisRun>1</NUpdatesThisRun>
+    <SaveInterval>1</SaveInterval>
+    <SavePrefix>rngB_chroma</SavePrefix>
+    <SaveVolfmt>SINGLEFILE</SaveVolfmt>
+    <ReproCheckP>false</ReproCheckP>
+    <MonitorForces>true</MonitorForces>
+    <InlineMeasurements>
+      <elem>
+        <Name>PLAQUETTE</Name>
+        <Frequency>1</Frequency>
+        <Param>
+          <version>2</version>
+          <GaugeState>
+            <Name>SIMPLE_GAUGE_STATE</Name>
+            <GaugeBC>
+              <Name>PERIODIC_GAUGEBC</Name>
+            </GaugeBC>
+          </GaugeState>
+        </Param>
+        <NamedObject>
+          <gauge_id>default_gauge_field</gauge_id>
+        </NamedObject>
+      </elem>
+    </InlineMeasurements>
+  </MCControl>
+  <HMCTrj>
+    <nrow>24 24 24 64</nrow>
+    <Monomials>
+      <elem>
+        <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_MULTIHASEN_FERM_MONOMIAL</Name>
+        <ShiftedMass>0 0.0005 0.0015 0.0035 0.0075 0.0155</ShiftedMass>
+        <NumofHasenTerms>5</NumofHasenTerms>
+        <Action>
+          <FermionAction>
+            <FermAct>SEOPREC_CLOVER</FermAct>
+            <Mass>-0.2790</Mass>
+            <clovCoeff>0.1559957304198659</clovCoeff>
+            <FermState>
+              <Name>STOUT_FERM_STATE</Name>
+              <rho>0.125</rho>
+              <n_smear>1</n_smear>
+              <FermionBC>
+                <FermBC>SIMPLE_FERMBC</FermBC>
+                <boundary>1 1 1 -1</boundary>
+              </FermionBC>
+            </FermState>
+          </FermionAction>
+          <InvertParam>
+            <invType>CG_INVERTER</invType>
+            <RsdCG>1.0e-6</RsdCG>
+            <MaxCG>5000</MaxCG>
+          </InvertParam>
+        </Action>
+        <NamedObject>
+          <monomial_id>HMC::has</monomial_id>
+        </NamedObject>
+      </elem>
+      <elem>
+        <Name>GAUGE_MONOMIAL</Name>
+        <GaugeAction>
+          <Name>LW_1LOOP_GAUGEACT</Name>
+          <beta>6.2</beta>
+          <u0>0.855453</u0>
+          <GaugeBC>
+            <Name>PERIODIC_GAUGEBC</Name>
+          </GaugeBC>
+        </GaugeAction>
+        <NamedObject>
+          <monomial_id>HMC::gauge</monomial_id>
+        </NamedObject>
+      </elem>
+    </Monomials>
+    <Hamiltonian>
+      <monomial_ids>
+        <elem>HMC::has</elem>
+        <elem>HMC::gauge</elem>
+      </monomial_ids>
+    </Hamiltonian>
+    <MDIntegrator>
+      <tau0>0.1</tau0>
+      <Integrator>
+        <Name>LCM_STS_LEAPFROG</Name>
+        <n_steps>1</n_steps>
+        <monomial_ids>
+          <elem>HMC::has</elem>
+        </monomial_ids>
+        <SubIntegrator>
+          <Name>LCM_STS_LEAPFROG</Name>
+          <n_steps>1</n_steps>
+          <monomial_ids>
+            <elem>HMC::gauge</elem>
+          </monomial_ids>
+        </SubIntegrator>
+      </Integrator>
+    </MDIntegrator>
+  </HMCTrj>
+</Params>
+
+  </Input>
+  <ProgramInfo>
+    <code_version>
+      <chroma>3.44.0</chroma>
+      <qdp>0.1</qdp>
+      <basePrecision>64</basePrecision>
+    </code_version>
+    <run_date>16 Sep 26 12:28:59 CST</run_date>
+    <Setgeom>
+      <latt_size>24 24 24 64</latt_size>
+      <logical_size>1 1 1 4</logical_size>
+      <subgrid_size>24 24 24 16</subgrid_size>
+      <total_volume>884736</total_volume>
+      <subgrid_volume>221184</subgrid_volume>
+    </Setgeom>
+  </ProgramInfo>
+  <Config_info><Params>
+      <MCControl>
+        <Cfg>
+          <cfg_type>SZINQIO</cfg_type>
+          <cfg_file>./beta6.20_mu-0.2790_ms-0.2400_L24x64_cfg_5000.lime</cfg_file>
+          <parallel_io>true</parallel_io>
+          <reunit>false</reunit>
+        </Cfg>
+        <RNG>
+          <Seed>
+            <elem>2621</elem>
+            <elem>224</elem>
+            <elem>3617</elem>
+            <elem>1614</elem>
+          </Seed>
+        </RNG>
+        <StartUpdateNum>5000</StartUpdateNum>
+        <NWarmUpUpdates>0</NWarmUpUpdates>
+        <NProductionUpdates>10000000</NProductionUpdates>
+        <NUpdatesThisRun>100</NUpdatesThisRun>
+        <SaveInterval>1</SaveInterval>
+        <SavePrefix>./beta6.20_mu-0.2790_ms-0.2400_L24x64</SavePrefix>
+        <SaveVolfmt>SINGLEFILE</SaveVolfmt>
+        <ParallelIO>true</ParallelIO>
+        <ReproCheckP>false</ReproCheckP>
+        <ReverseCheckP>false</ReverseCheckP>
+        <MonitorForces>true</MonitorForces>
+        <InlineMeasurements>
+          <elem>
+            <Name>ERASE_QUDA_MULTIGRID_SUBSPACE</Name>
+            <Frequency>1</Frequency>
+            <NamedObject>
+              <object_id>subspace_2416</object_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>APPLY_FERM_STATE</Name>
+            <Frequency>5</Frequency>
+            <Param>
+              <version>1</version>
+              <FermState>
+                <Name>STOUT_FERM_STATE</Name>
+                <rho>0.125</rho>
+                <n_smear>1</n_smear>
+                <orthog_dir>-1</orthog_dir>
+                <FermionBC>
+                  <FermBC>SIMPLE_FERMBC</FermBC>
+                  <boundary>1 1 1 -1</boundary>
+                </FermionBC>
+              </FermState>
+            </Param>
+            <NamedObject>
+              <gauge_id>default_gauge_field</gauge_id>
+              <output_id>out_3</output_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>PLAQUETTE</Name>
+            <Frequency>5</Frequency>
+            <Param>
+              <version>2</version>
+              <GaugeState>
+                <Name>SIMPLE_GAUGE_STATE</Name>
+                <GaugeBC>
+                  <Name>PERIODIC_GAUGEBC</Name>
+                </GaugeBC>
+              </GaugeState>
+            </Param>
+            <NamedObject>
+              <gauge_id>out_3</gauge_id>
+            </NamedObject>
+            <xml_file>./conv_plaquette_us/beta6.20_mu-0.2790_ms-0.2400_L24x64thin_plaquette_dat.xml</xml_file>
+          </elem>
+          <elem>
+            <Name>ERASE_NAMED_OBJECT</Name>
+            <Frequency>5</Frequency>
+            <NamedObject>
+              <object_id>out_3</object_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <annotation>
+        Sample WilsonFlow input
+      </annotation>
+            <Name>WILSON_FLOW_v2</Name>
+            <Frequency>5</Frequency>
+            <Param>
+              <version>2</version>
+              <nstep>1000</nstep>
+              <wtime>10.0</wtime>
+              <t_dir>3</t_dir>
+              <smear_dirs>1 1 1 1</smear_dirs>
+            </Param>
+            <NamedObject>
+              <gauge_in>default_gauge_field</gauge_in>
+              <gauge_out>wflow_gflied</gauge_out>
+            </NamedObject>
+            <xml_file>./wf/beta6.20_mu-0.2790_ms-0.2400_L24x64_a0_dat.xml</xml_file>
+          </elem>
+          <elem>
+            <Name>ERASE_NAMED_OBJECT</Name>
+            <Frequency>5</Frequency>
+            <NamedObject>
+              <object_id>wflow_gflied</object_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>PLAQUETTE</Name>
+            <Frequency>5</Frequency>
+            <Param>
+              <version>2</version>
+              <GaugeState>
+                <Name>SIMPLE_GAUGE_STATE</Name>
+                <GaugeBC>
+                  <Name>PERIODIC_GAUGEBC</Name>
+                </GaugeBC>
+              </GaugeState>
+            </Param>
+            <NamedObject>
+              <gauge_id>default_gauge_field</gauge_id>
+            </NamedObject>
+            <xml_file>./conv_plaquette/beta6.20_mu-0.2790_ms-0.2400_L24x64thin_plaquette_dat.xml</xml_file>
+          </elem>
+        </InlineMeasurements>
+      </MCControl>
+      <HMCTrj>
+        <nrow>24 24 24 64</nrow>
+        <Monomials>
+          <elem>
+            <Name>N_FLAVOR_LOGDET_DIAG_FERM_MONOMIAL</Name>
+            <FermionAction>
+              <FermAct>SEOPREC_CLOVER</FermAct>
+              <Mass>-0.2790</Mass>
+              <clovCoeff>1.160678675188</clovCoeff>
+              <AnisoParam>
+                <anisoP>false</anisoP>
+                <t_dir>3</t_dir>
+                <xi_0>1</xi_0>
+                <nu>1</nu>
+              </AnisoParam>
+              <FermState>
+                <Name>STOUT_FERM_STATE</Name>
+                <rho>0.125</rho>
+                <n_smear>1</n_smear>
+                <orthog_dir>-1</orthog_dir>
+                <FermionBC>
+                  <FermBC>SIMPLE_FERMBC</FermBC>
+                  <boundary>1 1 1 -1</boundary>
+                </FermionBC>
+              </FermState>
+            </FermionAction>
+            <num_flavors>2</num_flavors>
+            <NamedObject>
+              <monomial_id>HMC::logdet_2flav</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>N_FLAVOR_LOGDET_DIAG_FERM_MONOMIAL</Name>
+            <FermionAction>
+              <FermAct>SEOPREC_CLOVER</FermAct>
+              <Mass>-0.2400</Mass>
+              <clovCoeff>1.160678675188</clovCoeff>
+              <AnisoParam>
+                <anisoP>false</anisoP>
+                <t_dir>3</t_dir>
+                <xi_0>1</xi_0>
+                <nu>1</nu>
+              </AnisoParam>
+              <FermState>
+                <Name>STOUT_FERM_STATE</Name>
+                <rho>0.125</rho>
+                <n_smear>1</n_smear>
+                <orthog_dir>-1</orthog_dir>
+                <FermionBC>
+                  <FermBC>SIMPLE_FERMBC</FermBC>
+                  <boundary>1 1 1 -1</boundary>
+                </FermionBC>
+              </FermState>
+            </FermionAction>
+            <num_flavors>1</num_flavors>
+            <NamedObject>
+              <monomial_id>HMC::logdet_1flav</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>ONE_FLAVOR_SEOPREC_CONSTDET_FERM_RAT_MONOMIAL</Name>
+            <num_pf>1</num_pf>
+            <Action>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2400</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <ActionApprox>
+                <RationalApprox>
+                  <ratApproxType>READ_COEFFS</ratApproxType>
+                  <ApproxInfo>
+                    <lowerMin>0.0007</lowerMin>
+                    <upperMax>32</upperMax>
+                    <numPower>-1</numPower>
+                    <denPower>4</denPower>
+                    <degree>15</degree>
+                    <error>4.03313319931263e-10</error>
+                  </ApproxInfo>
+                  <PFECoeffs>
+                    <norm>0.163770623718441</norm>
+                    <res>0.000456950593274148 0.000933070019211125 0.00173260367764942 0.00325334197095044 0.00618223198007706 0.0118237931424094 0.0226893233800592 0.0436470377125287 0.0842552605967904 0.163834105667813 0.324048670587981 0.667674513073305 1.52011890693849 4.46787289574894 28.5894502783284</res>
+                    <pole>5.55835590775444e-05 0.000416755864364307 0.00139575880817907 0.00378307619387897 0.00950643266149974 0.023189559723109 0.0558993621083468 0.134164184434855 0.321874947989621 0.774669290837093 1.8820254251941 4.68164410178872 12.3608907310646 38.3422607790049 204.873221861185</pole>
+                  </PFECoeffs>
+                  <IPFECoeffs>
+                    <norm>6.10610118771501</norm>
+                    <res>-5.90262826538435e-06 -2.63363387226834e-05 -8.62160355606352e-05 -0.000263984258286453 -0.000792810319715722 -0.00236581977385576 -0.00704746125114149 -0.0210131715847004 -0.0629242233443976 -0.190538104129215 -0.592816342814611 -1.96992441194278 -7.70705574740274 -46.55440910469 -1281.70053339288</res>
+                    <pole>0.000109335909283339 0.000584211769074023 0.00181216713967916 0.00478464392272826 0.0119020708754186 0.0289155646996088 0.0695922442548162 0.166959610676697 0.400720136243831 0.965951931276981 2.35629923417205 5.92110728201649 16.0486180482883 53.7484938194392 402.99686403222</pole>
+                  </IPFECoeffs>
+                </RationalApprox>
+                <InvertParam>
+                  <invType>MULTI_CG_QUDA_CLOVER_INVERTER</invType>
+                  <CloverParams>
+                    <Mass>-0.2400</Mass>
+                    <clovCoeff>1.160678675188</clovCoeff>
+                    <AnisoParam>
+                      <anisoP>false</anisoP>
+                      <t_dir>3</t_dir>
+                      <xi_0>1</xi_0>
+                      <nu>1</nu>
+                    </AnisoParam>
+                  </CloverParams>
+                  <RsdTarget>1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09</RsdTarget>
+                  <Delta>1.0e-3</Delta>
+                  <Pipeline>1</Pipeline>
+                  <MaxIter>5000</MaxIter>
+                  <RsdToleranceFactor>10</RsdToleranceFactor>
+                  <AntiPeriodicT>true</AntiPeriodicT>
+                  <SolverType>CG</SolverType>
+                  <Verbose>false</Verbose>
+                  <CheckShifts>false</CheckShifts>
+                  <AsymmetricLinop>false</AsymmetricLinop>
+                  <CudaReconstruct>RECONS_12</CudaReconstruct>
+                  <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                  <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                  <AxialGaugeFix>false</AxialGaugeFix>
+                  <AutotuneDslash>true</AutotuneDslash>
+                </InvertParam>
+              </ActionApprox>
+              <ForceApprox>
+                <RationalApprox>
+                  <ratApproxType>READ_COEFFS</ratApproxType>
+                  <ApproxInfo>
+                    <lowerMin>0.0007</lowerMin>
+                    <upperMax>32</upperMax>
+                    <numPower>-1</numPower>
+                    <denPower>2</denPower>
+                    <degree>12</degree>
+                    <error>4.6350362516902e-08</error>
+                  </ApproxInfo>
+                  <PFECoeffs>
+                    <norm>0.0303920178459613</norm>
+                    <res>0.00943108618345698 0.0122499930158508 0.0187308029056777 0.0308130330025528 0.0521206555919226 0.0890870585774984 0.153090120000215 0.26493803350899 0.466760251501358 0.866223656646014 1.8819154073627 6.96033769739192</res>
+                    <pole>5.23045292201785e-05 0.000569214182255549 0.00226724207135389 0.00732861083302471 0.0222608882919378 0.0662886891030569 0.196319420401789 0.582378159903323 1.74664271771668 5.42569216297222 18.850085313508 99.6213166072174</pole>
+                  </PFECoeffs>
+                  <IPFECoeffs>
+                    <norm>32.9033763098059</norm>
+                    <res>-2.35124445424288e-06 -1.77560142598271e-05 -9.86487913190079e-05 -0.000512929571325821 -0.00261882317909701 -0.0133165788375054 -0.0679685157254159 -0.352611860890296 -1.92337140992721 -12.216101651812 -126.752473816389 -11557.2669864972</res>
+                    <pole>0.00022485147519499 0.00118832353421489 0.00412850551177035 0.0128246033220135 0.0384629808297044 0.114099766361147 0.337915869254489 1.00624915350357 3.05651378008224 9.87984489306155 39.3524980548421 428.26119141052</pole>
+                  </IPFECoeffs>
+                </RationalApprox>
+                <InvertParam>
+                  <invType>MULTI_CG_QUDA_CLOVER_INVERTER</invType>
+                  <CloverParams>
+                    <Mass>-0.2400</Mass>
+                    <clovCoeff>1.160678675188</clovCoeff>
+                    <AnisoParam>
+                      <anisoP>false</anisoP>
+                      <t_dir>3</t_dir>
+                      <xi_0>1</xi_0>
+                      <nu>1</nu>
+                    </AnisoParam>
+                  </CloverParams>
+                  <RsdTarget>1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09 1e-09</RsdTarget>
+                  <Delta>1.0e-3</Delta>
+                  <Pipeline>1</Pipeline>
+                  <MaxIter>5000</MaxIter>
+                  <RsdToleranceFactor>10</RsdToleranceFactor>
+                  <AntiPeriodicT>true</AntiPeriodicT>
+                  <SolverType>CG</SolverType>
+                  <Verbose>false</Verbose>
+                  <CheckShifts>false</CheckShifts>
+                  <AsymmetricLinop>false</AsymmetricLinop>
+                  <CudaReconstruct>RECONS_12</CudaReconstruct>
+                  <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                  <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                  <AxialGaugeFix>false</AxialGaugeFix>
+                  <AutotuneDslash>true</AutotuneDslash>
+                </InvertParam>
+              </ForceApprox>
+            </Action>
+            <NamedObject>
+              <monomial_id>HMC::rat_3strange</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_FERM_MONOMIAL</Name>
+            <Action>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2790</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2790</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 4</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <!--MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh-->
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <!--RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </Action>
+            <PrecAction>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2785</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2785</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 2</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                            <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh> 
+                            <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </PrecAction>
+            <NamedObject>
+              <monomial_id>HMC::has4</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_FERM_MONOMIAL</Name>
+            <Action>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2790</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2790</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 4</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <!--MaxIterSubspaceRefresh>20 20</MaxIterSubspaceRefresh-->
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <!--RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </Action>
+            <PrecAction>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2785</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2785</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 2</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                            <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh> 
+                            <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </PrecAction>
+            <ChronologicalPredictor>
+              <Name>QUDA_4D_PREDICTOR</Name>
+              <MaxChrono>5</MaxChrono>
+            </ChronologicalPredictor>
+            <NamedObject>
+              <monomial_id>MD::has4</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_FERM_MONOMIAL</Name>
+            <Action>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2785</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2785</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 4</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <!--MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh-->
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <!--RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </Action>
+            <PrecAction>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2775</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2775</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 2</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                            <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh> 
+                            <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </PrecAction>
+            <NamedObject>
+              <monomial_id>HMC::has3</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_FERM_MONOMIAL</Name>
+            <Action>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2785</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2785</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 4</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <!--MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh-->
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <!--RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </Action>
+            <PrecAction>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2775</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2775</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 2</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                            <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh> 
+                            <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </PrecAction>
+            <ChronologicalPredictor>
+              <Name>QUDA_4D_PREDICTOR</Name>
+              <MaxChrono>5</MaxChrono>
+            </ChronologicalPredictor>
+            <NamedObject>
+              <monomial_id>MD::has3</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_FERM_MONOMIAL</Name>
+            <Action>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2775</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2775</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 4</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <!--MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh-->
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <!--RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </Action>
+            <PrecAction>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2755</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2755</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 2</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                            <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh> 
+                            <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </PrecAction>
+            <NamedObject>
+              <monomial_id>HMC::has2</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_FERM_MONOMIAL</Name>
+            <Action>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2775</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2775</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 4</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <!--MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh-->
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <!--RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </Action>
+            <PrecAction>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2755</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2755</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 2</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                            <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh> 
+                            <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </PrecAction>
+            <ChronologicalPredictor>
+              <Name>QUDA_4D_PREDICTOR</Name>
+              <MaxChrono>5</MaxChrono>
+            </ChronologicalPredictor>
+            <NamedObject>
+              <monomial_id>MD::has2</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_FERM_MONOMIAL</Name>
+            <Action>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2755</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2755</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 4</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <!--MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh-->
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <!--RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </Action>
+            <PrecAction>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2715</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2715</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 2</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                            <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh> 
+                            <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </PrecAction>
+            <NamedObject>
+              <monomial_id>HMC::has1</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_FERM_MONOMIAL</Name>
+            <Action>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2755</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2755</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 4</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <!--MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh-->
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <!--RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </Action>
+            <PrecAction>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2715</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2715</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 2</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                            <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh> 
+                            <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </PrecAction>
+            <ChronologicalPredictor>
+              <Name>QUDA_4D_PREDICTOR</Name>
+              <MaxChrono>5</MaxChrono>
+            </ChronologicalPredictor>
+            <NamedObject>
+              <monomial_id>MD::has1</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_FERM_MONOMIAL</Name>
+            <Action>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2715</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2715</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 4</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <!--MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh-->
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <!--RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </Action>
+            <PrecAction>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2635</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2635</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 2</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                            <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh> 
+                            <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </PrecAction>
+            <NamedObject>
+              <monomial_id>HMC::has0</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_FERM_MONOMIAL</Name>
+            <Action>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2715</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2715</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 4</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <!--MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh-->
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <!--RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </Action>
+            <PrecAction>
+              <FermionAction>
+                <FermAct>SEOPREC_CLOVER</FermAct>
+                <Mass>-0.2635</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+                <FermState>
+                  <Name>STOUT_FERM_STATE</Name>
+                  <rho>0.125</rho>
+                  <n_smear>1</n_smear>
+                  <orthog_dir>-1</orthog_dir>
+                  <FermionBC>
+                    <FermBC>SIMPLE_FERMBC</FermBC>
+                    <boundary>1 1 1 -1</boundary>
+                  </FermionBC>
+                </FermState>
+              </FermionAction>
+              <InvertParam>
+                <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+                <CloverParams>
+                  <Mass>-0.2635</Mass>
+                  <clovCoeff>1.160678675188</clovCoeff>
+                  <AnisoParam>
+                    <anisoP>false</anisoP>
+                    <t_dir>3</t_dir>
+                    <xi_0>1</xi_0>
+                    <nu>1</nu>
+                  </AnisoParam>
+                </CloverParams>
+                <RsdTarget>1e-12</RsdTarget>
+                <Delta>1.0e-1</Delta>
+                <Pipeline>4</Pipeline>
+                <MaxIter>1000</MaxIter>
+                <RsdToleranceFactor>10</RsdToleranceFactor>
+                <AntiPeriodicT>true</AntiPeriodicT>
+                <SolverType>GCR</SolverType>
+                <Verbose>false</Verbose>
+                <AsymmetricLinop>false</AsymmetricLinop>
+                <CudaReconstruct>RECONS_12</CudaReconstruct>
+                <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+                <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+                <AxialGaugeFix>false</AxialGaugeFix>
+                <AutotuneDslash>true</AutotuneDslash>
+                <MULTIGRIDParams>
+                  <MaxCoarseIterations>12</MaxCoarseIterations>
+                  <Residual>1.0e-1</Residual>
+                  <CycleType>MG_RECURSIVE</CycleType>
+                  <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                  <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                  <MaxIterations>12</MaxIterations>
+                  <SmootherType>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <elem>MR</elem>
+                    <!--elem>MR</elem>
+                                <elem>MR</elem>
+                                <elem>MR</elem-->
+                  </SmootherType>
+                  <Verbosity>false</Verbosity>
+                  <Precision>HALF</Precision>
+                  <Reconstruct>RECONS_12</Reconstruct>
+                  <!--NullVectors>24 32</NullVectors-->
+                  <NullVectors>24 32</NullVectors>
+                  <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                  <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                  <CoarseResidual>0.1</CoarseResidual>
+                  <GenerateNullspace>true</GenerateNullspace>
+                  <GenerateAllLevels>true</GenerateAllLevels>
+                  <CheckMultigridSetup>true</CheckMultigridSetup>
+                  <SetupOnGPU>1</SetupOnGPU>
+                  <!--Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                            <Post-SmootherApplications>8 8</Post-SmootherApplications-->
+                  <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                  <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                  <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                  <Blocking>
+                    <elem>3 3 3 2</elem>
+                    <elem>2 2 2 2</elem>
+                    <!--elem>2 2 2 2</elem>
+                                <elem>2 2 2 2</elem-->
+                  </Blocking>
+                  <!--MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                            <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh> 
+                            <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate-->
+                  <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                  <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                  <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+                </MULTIGRIDParams>
+                <SubspaceID>subspace_2416</SubspaceID>
+                <ThresholdCount>100</ThresholdCount>
+              </InvertParam>
+            </PrecAction>
+            <ChronologicalPredictor>
+              <Name>QUDA_4D_PREDICTOR</Name>
+              <MaxChrono>5</MaxChrono>
+            </ChronologicalPredictor>
+            <NamedObject>
+              <monomial_id>MD::has0</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>GAUGE_MONOMIAL</Name>
+            <GaugeAction>
+              <Name>LW_TREE_GAUGEACT</Name>
+              <beta>6.20</beta>
+              <u0>0.855520</u0>
+              <GaugeBC>
+                <Name>PERIODIC_GAUGEBC</Name>
+              </GaugeBC>
+            </GaugeAction>
+            <NamedObject>
+              <monomial_id>HMC::lw_tree_gauge</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_FERM_MONOMIAL</Name>
+            <FermionAction>
+              <FermAct>SEOPREC_CLOVER</FermAct>
+              <Mass>-0.2635</Mass>
+              <clovCoeff>1.160678675188</clovCoeff>
+              <AnisoParam>
+                <anisoP>false</anisoP>
+                <t_dir>3</t_dir>
+                <xi_0>1</xi_0>
+                <nu>1</nu>
+              </AnisoParam>
+              <FermState>
+                <Name>STOUT_FERM_STATE</Name>
+                <rho>0.125</rho>
+                <n_smear>1</n_smear>
+                <orthog_dir>-1</orthog_dir>
+                <FermionBC>
+                  <FermBC>SIMPLE_FERMBC</FermBC>
+                  <boundary>1 1 1 -1</boundary>
+                </FermionBC>
+              </FermState>
+            </FermionAction>
+            <InvertParam>
+              <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+              <CloverParams>
+                <Mass>-0.2635</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+              </CloverParams>
+              <RsdTarget>1e-12</RsdTarget>
+              <Delta>1.0e-1</Delta>
+              <Pipeline>4</Pipeline>
+              <MaxIter>200</MaxIter>
+              <RsdToleranceFactor>10</RsdToleranceFactor>
+              <AntiPeriodicT>true</AntiPeriodicT>
+              <SolverType>GCR</SolverType>
+              <Verbose>false</Verbose>
+              <AsymmetricLinop>false</AsymmetricLinop>
+              <CudaReconstruct>RECONS_12</CudaReconstruct>
+              <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+              <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+              <AxialGaugeFix>false</AxialGaugeFix>
+              <AutotuneDslash>true</AutotuneDslash>
+              <MULTIGRIDParams>
+                <Residual>1.0e-1</Residual>
+                <CycleType>MG_RECURSIVE</CycleType>
+                <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                <MaxIterations>12</MaxIterations>
+                <SmootherType>
+                  <elem>MR</elem>
+                  <elem>MR</elem>
+                  <elem>MR</elem>
+                  <!--elem>MR</elem>
+                            <elem>MR</elem>
+                            <elem>MR</elem-->
+                </SmootherType>
+                <Verbosity>false</Verbosity>
+                <Precision>HALF</Precision>
+                <Reconstruct>RECONS_12</Reconstruct>
+                <!--NullVectors>24 32</NullVectors-->
+                <NullVectors>24 32</NullVectors>
+                <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                <CoarseResidual>0.1</CoarseResidual>
+                <GenerateNullspace>true</GenerateNullspace>
+                <GenerateAllLevels>true</GenerateAllLevels>
+                <CheckMultigridSetup>true</CheckMultigridSetup>
+                <SetupOnGPU>1</SetupOnGPU>
+                <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                <Blocking>
+                  <elem>3 3 3 2</elem>
+                  <elem>2 2 2 2</elem>
+                  <!--elem>2 2 2 4</elem>
+                            <elem>2 2 2 2</elem-->
+                </Blocking>
+                <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+              </MULTIGRIDParams>
+              <SubspaceID>subspace_2416</SubspaceID>
+              <ThresholdCount>100</ThresholdCount>
+            </InvertParam>
+            <NamedObject>
+              <monomial_id>HMC::has_cancel_2flav</monomial_id>
+            </NamedObject>
+          </elem>
+          <elem>
+            <Name>TWO_FLAVOR_SEOPREC_CONSTDET_FERM_MONOMIAL</Name>
+            <FermionAction>
+              <FermAct>SEOPREC_CLOVER</FermAct>
+              <Mass>-0.2635</Mass>
+              <clovCoeff>1.160678675188</clovCoeff>
+              <AnisoParam>
+                <anisoP>false</anisoP>
+                <t_dir>3</t_dir>
+                <xi_0>1</xi_0>
+                <nu>1</nu>
+              </AnisoParam>
+              <FermState>
+                <Name>STOUT_FERM_STATE</Name>
+                <rho>0.125</rho>
+                <n_smear>1</n_smear>
+                <orthog_dir>-1</orthog_dir>
+                <FermionBC>
+                  <FermBC>SIMPLE_FERMBC</FermBC>
+                  <boundary>1 1 1 -1</boundary>
+                </FermionBC>
+              </FermState>
+            </FermionAction>
+            <InvertParam>
+              <invType>QUDA_MULTIGRID_CLOVER_INVERTER</invType>
+              <CloverParams>
+                <Mass>-0.2635</Mass>
+                <clovCoeff>1.160678675188</clovCoeff>
+                <AnisoParam>
+                  <anisoP>false</anisoP>
+                  <t_dir>3</t_dir>
+                  <xi_0>1</xi_0>
+                  <nu>1</nu>
+                </AnisoParam>
+              </CloverParams>
+              <RsdTarget>1e-12</RsdTarget>
+              <Delta>1.0e-1</Delta>
+              <Pipeline>4</Pipeline>
+              <MaxIter>200</MaxIter>
+              <RsdToleranceFactor>10</RsdToleranceFactor>
+              <AntiPeriodicT>true</AntiPeriodicT>
+              <SolverType>GCR</SolverType>
+              <Verbose>false</Verbose>
+              <AsymmetricLinop>false</AsymmetricLinop>
+              <CudaReconstruct>RECONS_12</CudaReconstruct>
+              <CudaSloppyPrecision>SINGLE</CudaSloppyPrecision>
+              <CudaSloppyReconstruct>RECONS_12</CudaSloppyReconstruct>
+              <AxialGaugeFix>false</AxialGaugeFix>
+              <AutotuneDslash>true</AutotuneDslash>
+              <MULTIGRIDParams>
+                <Residual>1.0e-1</Residual>
+                <CycleType>MG_RECURSIVE</CycleType>
+                <RelaxationOmegaMG>1.0</RelaxationOmegaMG>
+                <RelaxationOmegaOuter>1.0</RelaxationOmegaOuter>
+                <MaxIterations>12</MaxIterations>
+                <SmootherType>
+                  <elem>MR</elem>
+                  <elem>MR</elem>
+                  <elem>MR</elem>
+                  <!--elem>MR</elem>
+                            <elem>MR</elem>
+                            <elem>MR</elem-->
+                </SmootherType>
+                <Verbosity>false</Verbosity>
+                <Precision>HALF</Precision>
+                <Reconstruct>RECONS_12</Reconstruct>
+                <NullVectors>24 32</NullVectors>
+                <OuterGCRNKrylov>20</OuterGCRNKrylov>
+                <PrecondGCRNKrylov>10</PrecondGCRNKrylov>
+                <CoarseResidual>0.1</CoarseResidual>
+                <GenerateNullspace>true</GenerateNullspace>
+                <GenerateAllLevels>true</GenerateAllLevels>
+                <CheckMultigridSetup>true</CheckMultigridSetup>
+                <SetupOnGPU>1</SetupOnGPU>
+                <Pre-SmootherApplications>0 0</Pre-SmootherApplications>
+                <Post-SmootherApplications>8 8</Post-SmootherApplications>
+                <SchwarzType>ADDITIVE_SCHWARZ</SchwarzType>
+                <Blocking>
+                  <elem>3 3 3 2</elem>
+                  <elem>2 2 2 2</elem>
+                  <!--elem>2 2 2 4</elem>
+                            <elem>2 2 2 2</elem-->
+                </Blocking>
+                <MaxIterSubspaceCreate>500 500</MaxIterSubspaceCreate>
+                <MaxIterSubspaceRefresh>500 500</MaxIterSubspaceRefresh>
+                <RsdTargetSubspaceCreate>5e-06 5e-06</RsdTargetSubspaceCreate>
+              </MULTIGRIDParams>
+              <SubspaceID>subspace_2416</SubspaceID>
+              <ThresholdCount>100</ThresholdCount>
+            </InvertParam>
+            <ChronologicalPredictor>
+              <Name>QUDA_4D_PREDICTOR</Name>
+              <MaxChrono>7</MaxChrono>
+            </ChronologicalPredictor>
+            <NamedObject>
+              <monomial_id>MD::has_cancel_2flav</monomial_id>
+            </NamedObject>
+          </elem>
+        </Monomials>
+        <Hamiltonian>
+          <monomial_ids>
+            <elem>HMC::logdet_2flav</elem>
+            <elem>HMC::logdet_1flav</elem>
+            <elem>HMC::rat_3strange</elem>
+            <elem>HMC::has0</elem>
+            <elem>HMC::has1</elem>
+            <elem>HMC::has2</elem>
+            <elem>HMC::has3</elem>
+            <elem>HMC::has4</elem>
+            <elem>HMC::has_cancel_2flav</elem>
+            <elem>HMC::lw_tree_gauge</elem>
+          </monomial_ids>
+        </Hamiltonian>
+        <MDIntegrator>
+          <tau0>1.0</tau0>
+          <copyList>
+            <elem>
+              <copyFrom>HMC::has0</copyFrom>
+              <copyTo>MD::has0</copyTo>
+            </elem>
+            <elem>
+              <copyFrom>HMC::has1</copyFrom>
+              <copyTo>MD::has1</copyTo>
+            </elem>
+            <elem>
+              <copyFrom>HMC::has2</copyFrom>
+              <copyTo>MD::has2</copyTo>
+            </elem>
+            <elem>
+              <copyFrom>HMC::has3</copyFrom>
+              <copyTo>MD::has3</copyTo>
+            </elem>
+            <elem>
+              <copyFrom>HMC::has4</copyFrom>
+              <copyTo>MD::has4</copyTo>
+            </elem>
+            <elem>
+              <copyFrom>HMC::has_cancel_2flav</copyFrom>
+              <copyTo>MD::has_cancel_2flav</copyTo>
+            </elem>
+          </copyList>
+          <Integrator>
+            <Name>LCM_STS_FORCE_GRAD</Name>
+            <n_steps>10</n_steps>
+            <monomial_ids>
+              <elem>HMC::logdet_2flav</elem>
+              <elem>HMC::logdet_1flav</elem>
+              <elem>MD::has0</elem>
+              <elem>MD::has1</elem>
+              <elem>MD::has2</elem>
+              <elem>MD::has3</elem>
+              <elem>MD::has4</elem>
+              <elem>HMC::rat_3strange</elem>
+            </monomial_ids>
+            <SubIntegrator>
+              <Name>LCM_STS_FORCE_GRAD</Name>
+              <n_steps>2</n_steps>
+              <monomial_ids>
+                <elem>MD::has_cancel_2flav</elem>
+                <elem>HMC::lw_tree_gauge</elem>
+              </monomial_ids>
+            </SubIntegrator>
+          </Integrator>
+        </MDIntegrator>
+      </HMCTrj>
+    </Params>
+
+  </Config_info>
+  <doHMC>
+    <MCUpdates>
+      <elem>
+        <Update>
+          <update_no>1</update_no>
+          <WarmUpP>false</WarmUpP>
+          <HMCTrajectory>
+            <WarmUpP>false</WarmUpP>
+            <FieldRefreshment_0>
+              <n_count_0>54</n_count_0>
+            </FieldRefreshment_0>
+            <FieldRefreshment_1>
+              <n_count_1>53</n_count_1>
+            </FieldRefreshment_1>
+            <FieldRefreshment_2>
+              <n_count_2>53</n_count_2>
+            </FieldRefreshment_2>
+            <FieldRefreshment_3>
+              <n_count_3>52</n_count_3>
+            </FieldRefreshment_3>
+            <FieldRefreshment_4>
+              <n_count_4>49</n_count_4>
+            </FieldRefreshment_4>
+            <H_old>
+              <mesE>
+                <mesKE>
+                  <KE>-1824.86268229041</KE>
+                </mesKE>
+                <mesPE>
+                  <num_terms>2</num_terms>
+                  <PEByMonomials>
+                    <elem>
+                      <PrecConstDetTwoFlavorRatioConvConvMultihasenFermMonomial>
+                        <n_count_hasenterm_1>54</n_count_hasenterm_1>
+                        <S_hasenterm_1>5308206.37323368</S_hasenterm_1>
+                        <n_count_hasenterm_2>54</n_count_hasenterm_2>
+                        <S_hasenterm_2>5306323.6465142</S_hasenterm_2>
+                        <n_count_hasenterm_3>54</n_count_hasenterm_3>
+                        <S_hasenterm_3>5310485.49371909</S_hasenterm_3>
+                        <n_count_hasenterm_4>53</n_count_hasenterm_4>
+                        <S_hasenterm_4>5312794.36718267</S_hasenterm_4>
+                        <n_count_hasenterm_5>53</n_count_hasenterm_5>
+                        <S_hasenterm_5>5305827.82009938</S_hasenterm_5>
+                        <S>26543637.700749</S>
+                      </PrecConstDetTwoFlavorRatioConvConvMultihasenFermMonomial>
+                    </elem>
+                    <elem>
+                      <GaugeMonomial>
+                        <S>-15916656.932225</S>
+                      </GaugeMonomial>
+                    </elem>
+                  </PEByMonomials>
+                </mesPE>
+              </mesE>
+              <KE_old>-1824.86268229041</KE_old>
+              <PE_old>10626980.768524</PE_old>
+            </H_old>
+            <leapP>
+              <dt>0.05</dt>
+              <dt_actual_per_dir>0.05 0.05 0.05 0.05</dt_actual_per_dir>
+              <AbsHamiltonianForce>
+                <num_terms>1</num_terms>
+                <ForcesByMonomial>
+                  <elem>
+                    <TwoFlavorRatioConvConvMultihasenWilsonTypeFermMonomial>
+                      <n_count_hasenterm_1>54</n_count_hasenterm_1>
+                      <Forces_hasenterm_1>
+                        <F_sq_per_direction>4.98251428177388e-11 4.97893520679595e-11 4.98187460801518e-11 4.98755273967807e-11</F_sq_per_direction>
+                        <F_avg_per_direction>6.68959624243297e-06 6.68686011771891e-06 6.68844213705548e-06 6.69107196374208e-06</F_avg_per_direction>
+                        <F_max_per_direction>2.48761118610948e-05 2.70317695688121e-05 2.96065816570137e-05 2.45055054889383e-05</F_max_per_direction>
+                        <F_max_dt_per_direction>2.48761118610948e-05 2.70317695688121e-05 2.96065816570137e-05 2.45055054889383e-05</F_max_dt_per_direction>
+                        <F_sq>4.98271920906577e-11</F_sq>
+                        <F_avg>6.68899261523736e-06</F_avg>
+                        <F_max>2.96065816570137e-05</F_max>
+                        <F_max_dt>2.96065816570137e-05</F_max_dt>
+                      </Forces_hasenterm_1>
+                      <n_count_hasenterm_2>54</n_count_hasenterm_2>
+                      <Forces_hasenterm_2>
+                        <F_sq_per_direction>2.61235509994851e-09 2.61292799680859e-09 2.61192821228323e-09 2.61131285335882e-09</F_sq_per_direction>
+                        <F_avg_per_direction>4.84833007034776e-05 4.84934818490359e-05 4.84923699435167e-05 4.84752994236461e-05</F_avg_per_direction>
+                        <F_max_per_direction>0.000192217987154935 0.000191752807923496 0.000177928115619477 0.000180046252014621</F_max_per_direction>
+                        <F_max_dt_per_direction>0.000192217987154935 0.000191752807923496 0.000177928115619477 0.000180046252014621</F_max_dt_per_direction>
+                        <F_sq>2.61213104059979e-09</F_sq>
+                        <F_avg>4.84861129799191e-05</F_avg>
+                        <F_max>0.000192217987154935</F_max>
+                        <F_max_dt>0.000192217987154935</F_max_dt>
+                      </Forces_hasenterm_2>
+                      <n_count_hasenterm_3>54</n_count_hasenterm_3>
+                      <Forces_hasenterm_3>
+                        <F_sq_per_direction>6.67272938704965e-08 6.6690671536129e-08 6.66994629082004e-08 6.67093757661544e-08</F_sq_per_direction>
+                        <F_avg_per_direction>0.000245090726593967 0.000245037994408261 0.000245049988137244 0.000245052716506563</F_avg_per_direction>
+                        <F_max_per_direction>0.00100439256711093 0.000982879889457266 0.000842287122542993 0.000848427627976431</F_max_per_direction>
+                        <F_max_dt_per_direction>0.00100439256711093 0.000982879889457266 0.000842287122542993 0.000848427627976431</F_max_dt_per_direction>
+                        <F_sq>6.67067010202451e-08</F_sq>
+                        <F_avg>0.000245057856411509</F_avg>
+                        <F_max>0.00100439256711093</F_max>
+                        <F_max_dt>0.00100439256711093</F_max_dt>
+                      </Forces_hasenterm_3>
+                      <n_count_hasenterm_4>53</n_count_hasenterm_4>
+                      <Forces_hasenterm_4>
+                        <F_sq_per_direction>1.26378618752428e-06 1.26392820677655e-06 1.26471839171174e-06 1.26335791506754e-06</F_sq_per_direction>
+                        <F_avg_per_direction>0.00106643553746325 0.00106651679836409 0.00106682216408506 0.00106631863872355</F_avg_per_direction>
+                        <F_max_per_direction>0.00396215560562691 0.00437191335364553 0.00374556886732505 0.00434427592321629</F_max_per_direction>
+                        <F_max_dt_per_direction>0.00396215560562691 0.00437191335364553 0.00374556886732505 0.00434427592321629</F_max_dt_per_direction>
+                        <F_sq>1.26394767527003e-06</F_sq>
+                        <F_avg>0.00106652328465899</F_avg>
+                        <F_max>0.00437191335364553</F_max>
+                        <F_max_dt>0.00437191335364553</F_max_dt>
+                      </Forces_hasenterm_4>
+                      <n_count_hasenterm_5>53</n_count_hasenterm_5>
+                      <Forces_hasenterm_5>
+                        <F_sq_per_direction>2.06538768657835e-05 2.0650266493688e-05 2.06406875239324e-05 2.06335170381321e-05</F_sq_per_direction>
+                        <F_avg_per_direction>0.00431278938408048 0.00431238413606045 0.0043116952950689 0.00431047977483466</F_avg_per_direction>
+                        <F_max_per_direction>0.0160580546015844 0.0160953956378464 0.01538096540018 0.0165867988085282</F_max_per_direction>
+                        <F_max_dt_per_direction>0.0160580546015844 0.0160953956378464 0.01538096540018 0.0165867988085282</F_max_dt_per_direction>
+                        <F_sq>2.0644586980384e-05</F_sq>
+                        <F_avg>0.00431183714751112</F_avg>
+                        <F_max>0.0165867988085282</F_max>
+                        <F_max_dt>0.0165867988085282</F_max_dt>
+                      </Forces_hasenterm_5>
+                      <Forces>
+                        <F_sq_per_direction>1.60550966178024e-05 1.60478891560075e-05 1.60299957562129e-05 1.60412871318851e-05</F_sq_per_direction>
+                        <F_avg_per_direction>0.00379627011388051 0.00379503396963409 0.00379337453843695 0.0037944381252457</F_avg_per_direction>
+                        <F_max_per_direction>0.014611783321683 0.0165224699280717 0.0154284874999828 0.0169612165418099</F_max_per_direction>
+                        <F_max_dt_per_direction>0.014611783321683 0.0165224699280717 0.0154284874999828 0.0169612165418099</F_max_dt_per_direction>
+                        <F_sq>1.6043567165477e-05</F_sq>
+                        <F_avg>0.00379477918679931</F_avg>
+                        <F_max>0.0169612165418099</F_max>
+                        <F_max_dt>0.0169612165418099</F_max_dt>
+                      </Forces>
+                    </TwoFlavorRatioConvConvMultihasenWilsonTypeFermMonomial>
+                  </elem>
+                </ForcesByMonomial>
+              </AbsHamiltonianForce>
+            </leapP>
+            <leapP>
+              <dt>0.05</dt>
+              <dt_actual_per_dir>0.05 0.05 0.05 0.05</dt_actual_per_dir>
+              <AbsHamiltonianForce>
+                <num_terms>1</num_terms>
+                <ForcesByMonomial>
+                  <elem>
+                    <GaugeMonomial>
+                      <Forces>
+                        <F_sq_per_direction>21.4914184249818 21.4463354056523 21.4727585282361 21.4706005861176</F_sq_per_direction>
+                        <F_avg_per_direction>4.51980573486527 4.51516170198931 4.51807831230712 4.51753273794375</F_avg_per_direction>
+                        <F_max_per_direction>9.0189416912299 8.70399290339545 8.90777746909284 8.66096439933664</F_max_per_direction>
+                        <F_max_dt_per_direction>9.0189416912299 8.70399290339545 8.90777746909284 8.66096439933664</F_max_dt_per_direction>
+                        <F_sq>21.470278236247</F_sq>
+                        <F_avg>4.51764462177636</F_avg>
+                        <F_max>9.0189416912299</F_max>
+                        <F_max_dt>9.0189416912299</F_max_dt>
+                      </Forces>
+                    </GaugeMonomial>
+                  </elem>
+                </ForcesByMonomial>
+              </AbsHamiltonianForce>
+            </leapP>
+            <leapQ>
+              <dt>0.1</dt>
+              <dt_actual_per_dir>0.1 0.1 0.1 0.1</dt_actual_per_dir>
+            </leapQ>
+            <leapP>
+              <dt>0.05</dt>
+              <dt_actual_per_dir>0.05 0.05 0.05 0.05</dt_actual_per_dir>
+              <AbsHamiltonianForce>
+                <num_terms>1</num_terms>
+                <ForcesByMonomial>
+                  <elem>
+                    <GaugeMonomial>
+                      <Forces>
+                        <F_sq_per_direction>21.514110205866 21.458461649003 21.4871247653961 21.4884920636465</F_sq_per_direction>
+                        <F_avg_per_direction>4.52223350138639 4.51650518911883 4.51956491117281 4.51938802776035</F_avg_per_direction>
+                        <F_max_per_direction>8.76358588466908 8.84715540964983 8.89916047879008 8.78708655151466</F_max_per_direction>
+                        <F_max_dt_per_direction>8.76358588466908 8.84715540964983 8.89916047879008 8.78708655151466</F_max_dt_per_direction>
+                        <F_sq>21.4870471709779</F_sq>
+                        <F_avg>4.51942290735959</F_avg>
+                        <F_max>8.89916047879008</F_max>
+                        <F_max_dt>8.89916047879008</F_max_dt>
+                      </Forces>
+                    </GaugeMonomial>
+                  </elem>
+                </ForcesByMonomial>
+              </AbsHamiltonianForce>
+            </leapP>
+            <leapP>
+              <dt>0.05</dt>
+              <dt_actual_per_dir>0.05 0.05 0.05 0.05</dt_actual_per_dir>
+              <AbsHamiltonianForce>
+                <num_terms>1</num_terms>
+                <ForcesByMonomial>
+                  <elem>
+                    <TwoFlavorRatioConvConvMultihasenWilsonTypeFermMonomial>
+                      <n_count_hasenterm_1>54</n_count_hasenterm_1>
+                      <Forces_hasenterm_1>
+                        <F_sq_per_direction>4.87209224619628e-11 4.8688683806529e-11 4.87270266267362e-11 4.8777471354702e-11</F_sq_per_direction>
+                        <F_avg_per_direction>6.61592334075742e-06 6.61331329114133e-06 6.61558355070436e-06 6.61783854511704e-06</F_avg_per_direction>
+                        <F_max_per_direction>2.44867709073967e-05 2.61867827024495e-05 2.96194699240444e-05 2.36498407707669e-05</F_max_per_direction>
+                        <F_max_dt_per_direction>2.44867709073967e-05 2.61867827024495e-05 2.96194699240444e-05 2.36498407707669e-05</F_max_dt_per_direction>
+                        <F_sq>4.87285260624825e-11</F_sq>
+                        <F_avg>6.61566468193004e-06</F_avg>
+                        <F_max>2.96194699240444e-05</F_max>
+                        <F_max_dt>2.96194699240444e-05</F_max_dt>
+                      </Forces_hasenterm_1>
+                      <n_count_hasenterm_2>53</n_count_hasenterm_2>
+                      <Forces_hasenterm_2>
+                        <F_sq_per_direction>2.60243055602568e-09 2.60297036521617e-09 2.60189593138812e-09 2.60168492753873e-09</F_sq_per_direction>
+                        <F_avg_per_direction>4.83974606334962e-05 4.84067895637955e-05 4.84044535846599e-05 4.83893964872744e-05</F_avg_per_direction>
+                        <F_max_per_direction>0.000191515823127901 0.000193101605632908 0.000174661739205511 0.000172076073355573</F_max_per_direction>
+                        <F_max_dt_per_direction>0.000191515823127901 0.000193101605632908 0.000174661739205511 0.000172076073355573</F_max_dt_per_direction>
+                        <F_sq>2.60224544504218e-09</F_sq>
+                        <F_avg>4.83995250673065e-05</F_avg>
+                        <F_max>0.000193101605632908</F_max>
+                        <F_max_dt>0.000193101605632908</F_max_dt>
+                      </Forces_hasenterm_2>
+                      <n_count_hasenterm_3>53</n_count_hasenterm_3>
+                      <Forces_hasenterm_3>
+                        <F_sq_per_direction>6.63594122111464e-08 6.6331854141802e-08 6.63338939053719e-08 6.63442073671146e-08</F_sq_per_direction>
+                        <F_avg_per_direction>0.000244426242495507 0.000244392044721625 0.000244394845572557 0.000244394606563335</F_avg_per_direction>
+                        <F_max_per_direction>0.000960485370235074 0.000987741719779895 0.000831124961920198 0.000865409080543387</F_max_per_direction>
+                        <F_max_dt_per_direction>0.000960485370235074 0.000987741719779895 0.000831124961920198 0.000865409080543387</F_max_dt_per_direction>
+                        <F_sq>6.63423419063587e-08</F_sq>
+                        <F_avg>0.000244401934838256</F_avg>
+                        <F_max>0.000987741719779895</F_max>
+                        <F_max_dt>0.000987741719779895</F_max_dt>
+                      </Forces_hasenterm_3>
+                      <n_count_hasenterm_4>53</n_count_hasenterm_4>
+                      <Forces_hasenterm_4>
+                        <F_sq_per_direction>1.25922535011945e-06 1.25915943995715e-06 1.26010008513368e-06 1.25870330240749e-06</F_sq_per_direction>
+                        <F_avg_per_direction>0.0010645695691139 0.00106457605404731 0.00106493016513206 0.00106443333596577</F_avg_per_direction>
+                        <F_max_per_direction>0.0039724622389513 0.00416652893277971 0.0037537333059404 0.00389912413921085</F_max_per_direction>
+                        <F_max_dt_per_direction>0.0039724622389513 0.00416652893277971 0.0037537333059404 0.00389912413921085</F_max_dt_per_direction>
+                        <F_sq>1.25929704440444e-06</F_sq>
+                        <F_avg>0.00106462728106476</F_avg>
+                        <F_max>0.00416652893277971</F_max>
+                        <F_max_dt>0.00416652893277971</F_max_dt>
+                      </Forces_hasenterm_4>
+                      <n_count_hasenterm_5>52</n_count_hasenterm_5>
+                      <Forces_hasenterm_5>
+                        <F_sq_per_direction>2.05719984120996e-05 2.05678927128348e-05 2.05576846368728e-05 2.05507753893365e-05</F_sq_per_direction>
+                        <F_avg_per_direction>0.00430438661460686 0.00430386310361846 0.00430318016966681 0.00430204762879268</F_avg_per_direction>
+                        <F_max_per_direction>0.0166487059735697 0.016329740645502 0.0157706216829116 0.0163451432125038</F_max_per_direction>
+                        <F_max_dt_per_direction>0.0166487059735697 0.016329740645502 0.0157706216829116 0.0163451432125038</F_max_dt_per_direction>
+                        <F_sq>2.05620877877859e-05</F_sq>
+                        <F_avg>0.0043033693791712</F_avg>
+                        <F_max>0.0166487059735697</F_max>
+                        <F_max_dt>0.0166487059735697</F_max_dt>
+                      </Forces_hasenterm_5>
+                      <Forces>
+                        <F_sq_per_direction>1.59989046882759e-05 1.59920606941908e-05 1.59750498609376e-05 1.59829662639675e-05</F_sq_per_direction>
+                        <F_avg_per_direction>0.00378969841687691 0.00378841986208297 0.00378703050450197 0.00378775572847139</F_avg_per_direction>
+                        <F_max_per_direction>0.0153477127820651 0.0165814324841277 0.0160124116067183 0.0165662111145022</F_max_per_direction>
+                        <F_max_dt_per_direction>0.0153477127820651 0.0165814324841277 0.0160124116067183 0.0165662111145022</F_max_dt_per_direction>
+                        <F_sq>1.5987245376843e-05</F_sq>
+                        <F_avg>0.00378822612798331</F_avg>
+                        <F_max>0.0165814324841277</F_max>
+                        <F_max_dt>0.0165814324841277</F_max_dt>
+                      </Forces>
+                    </TwoFlavorRatioConvConvMultihasenWilsonTypeFermMonomial>
+                  </elem>
+                </ForcesByMonomial>
+              </AbsHamiltonianForce>
+            </leapP>
+            <H_new>
+              <mesE>
+                <mesKE>
+                  <KE>-27903.9479796852</KE>
+                </mesKE>
+                <mesPE>
+                  <num_terms>2</num_terms>
+                  <PEByMonomials>
+                    <elem>
+                      <PrecConstDetTwoFlavorRatioConvConvMultihasenFermMonomial>
+                        <n_count_hasenterm_1>54</n_count_hasenterm_1>
+                        <S_hasenterm_1>5308206.37379968</S_hasenterm_1>
+                        <n_count_hasenterm_2>53</n_count_hasenterm_2>
+                        <S_hasenterm_2>5306323.65511301</S_hasenterm_2>
+                        <n_count_hasenterm_3>53</n_count_hasenterm_3>
+                        <S_hasenterm_3>5310485.40890749</S_hasenterm_3>
+                        <n_count_hasenterm_4>53</n_count_hasenterm_4>
+                        <S_hasenterm_4>5312794.75245225</S_hasenterm_4>
+                        <n_count_hasenterm_5>52</n_count_hasenterm_5>
+                        <S_hasenterm_5>5305828.60074698</S_hasenterm_5>
+                        <S>26543638.7910194</S>
+                      </PrecConstDetTwoFlavorRatioConvConvMultihasenFermMonomial>
+                    </elem>
+                    <elem>
+                      <GaugeMonomial>
+                        <S>-15890202.3039621</S>
+                      </GaugeMonomial>
+                    </elem>
+                  </PEByMonomials>
+                </mesPE>
+              </mesE>
+              <KE_new>-27903.9479796852</KE_new>
+              <PE_new>10653436.4870574</PE_new>
+            </H_new>
+            <deltaKE>-26079.0852973948</deltaKE>
+            <deltaPE>26455.7185333818</deltaPE>
+            <deltaH>376.633235987043</deltaH>
+            <AccProb>2.69317087667772e-164</AccProb>
+            <AcceptP>false</AcceptP>
+          </HMCTrajectory>
+          <seconds_for_trajectory>25.832986</seconds_for_trajectory>
+          <seconds_for_measurements>0.015115</seconds_for_measurements>
+        </Update>
+      </elem>
+    </MCUpdates>
+  </doHMC>
+</hmc>

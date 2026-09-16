@@ -1,0 +1,2 @@
+run_id,cfg,subset,monomial_index,monomial_label,eps,S_plus,S_minus,finite_difference,force_dot_direction,fd_plus_force_dot,relative_error_opposite_sign,force_norm
+force_check_24x64_ratio1_fd_4gpu_v2_20260915,1000,ratio_only,0,has0_0_to_0.0005,1e-06,5309185.077304654,5309185.07730465,0.001862645149230957,-0.002793870126197362,-0.0009312249769664049,0.0009312249769664049,0.006780028524864692

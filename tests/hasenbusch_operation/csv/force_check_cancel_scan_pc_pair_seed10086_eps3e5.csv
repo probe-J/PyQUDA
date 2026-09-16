@@ -1,0 +1,3 @@
+run_id,cfg,subset,shift_chain,eps,S_plus,S_minus,finite_difference,force_dot_direction,host_force_dot_direction,host_weighted_force_dot_direction,fd_minus_force_dot,fd_plus_force_dot,relative_error_same_sign,relative_error_opposite_sign,direction_norm,force_norm
+cancel_scan_pc_pair_seed10086_eps3e5,1000,cancel_only,"0.0,0.0005,0.0015,0.0035,0.0075,0.0155",3e-05,249894.88563845435,249894.86764755787,299.8482746382554,279.0621186967619,80.53112060037238,44.38196429240705,20.78615594149352,578.9103933350173,0.06932224628129165,1.930677753718708,526.0882639513972,155.70586999623617
+

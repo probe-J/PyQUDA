@@ -1,0 +1,2 @@
+run_id,cfg,subset,eps,S_plus,S_minus,finite_difference,force_dot_direction,fd_plus_force_dot,relative_error_opposite_sign,direction_norm,force_norm
+smeared_cfg1000_logdet_only_active_mu_20260605,1000,logdet_only,3e-05,9730.992891913145,9730.99204832509,14.059800923860166,-14.059800836735576,8.712459020898677e-08,6.1967157771865824e-09,525.6998656802731,22.907413615142175

@@ -1,0 +1,42 @@
+{
+  "cfg": "1000",
+  "dagger_cases": {
+    "MINUS": {
+      "base_coeff": {
+        "imag": 4.7910301079071363e-21,
+        "real": -1.8036569360817899e-02
+      },
+      "base_norm": 1.0040375433483287e+04,
+      "relative_residual": 8.0714224697458514e-16,
+      "shift_coeff": {
+        "imag": -1.8115387763809315e-18,
+        "real": -7.7500000000000025e-03
+      },
+      "shift_norm": 6.1353632627455659e+02,
+      "target_norm": 1.8115523318740068e+02
+    },
+    "PLUS": {
+      "base_coeff": {
+        "imag": 6.3527471044072525e-22,
+        "real": -1.8036569360817899e-02
+      },
+      "base_norm": 1.0349979920943124e+04,
+      "relative_residual": 7.7871459745485107e-16,
+      "shift_coeff": {
+        "imag": -1.1698583792765956e-18,
+        "real": 7.7499999999999991e-03
+      },
+      "shift_norm": 6.1353632627455659e+02,
+      "target_norm": 1.8673867737531998e+02
+    }
+  },
+  "expected_chroma_base_coeff": -2.5000000000000000e-01,
+  "expected_quda_base_coeff": -1.8036569360817895e-02,
+  "expected_shift_coeff_mu": 1.5500000000000000e-02,
+  "expected_shift_coeff_mu_over_2": 7.7499999999999999e-03,
+  "kappa": 1.3430029546065003e-01,
+  "mu": 1.5500000000000000e-02,
+  "run_id": "op_probe_cfg1000_seed10086_20260604_0240",
+  "seed": 10086,
+  "t_boundary": -1
+}

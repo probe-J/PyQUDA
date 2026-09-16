@@ -1,0 +1,3 @@
+run_id,branch,eps,signed_bilinear_plus,signed_bilinear_minus,finite_difference,force_dot_direction,fd_plus_force_dot,fd_minus_force_dot
+branch_qudanorm_seed10086_20260604a,minus_Mdag_XY,3e-05,-355106.0947751591,-355106.0891244894,-94.17782809274891,0.0,-94.17782809274891,-94.17782809274891
+branch_qudanorm_seed10086_20260604a,plus_M_YX,3e-05,-355106.09477515914,-355106.08912448934,-94.17783003300428,0.0,-94.17783003300428,-94.17783003300428

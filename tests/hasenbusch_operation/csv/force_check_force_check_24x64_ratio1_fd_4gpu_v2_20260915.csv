@@ -1,0 +1,3 @@
+run_id,cfg,subset,shift_chain,eps,S_plus,S_minus,finite_difference,force_dot_direction,host_force_dot_direction,host_weighted_force_dot_direction,fd_minus_force_dot,fd_plus_force_dot,relative_error_same_sign,relative_error_opposite_sign,direction_norm,force_norm
+force_check_24x64_ratio1_fd_4gpu_v2_20260915,1000,ratio_only,"0.0,0.0005,0.0015,0.0035,0.0075,0.0155",1e-06,5309185.077304654,5309185.07730465,0.001862645149230957,-0.002793870126197362,-0.005875774243260501,-0.013113051798270258,0.004656515275428319,-0.0009312249769664049,0.004656515275428319,0.0009312249769664049,2103.335807112551,0.006780028524864692
+

@@ -1,0 +1,19 @@
+{
+  "run_id": "clover_sym_from_asym_twobasis_cfg1000_seed10086",
+  "cfg": "1000",
+  "seed": 10086,
+  "mass": -2.3999999999999999e-01,
+  "matpc_type": "odd_odd",
+  "expected_chroma_base_coeff": -2.5000000000000000e-01,
+  "fit": {
+    "identity_coeff_real": 3.7600000000000011e+00,
+    "identity_coeff_imag": -5.9986873324549550e-18,
+    "base_coeff_real": -6.6489361702127672e-02,
+    "base_coeff_imag": -1.2766480581016815e-17,
+    "normalized_base_coeff": -1.7683340878225439e-02,
+    "relative_residual": 6.4382670878911897e-16,
+    "target_norm": 2.2890669079595204e+03,
+    "src_norm": 5.7681337754354206e+02,
+    "base_norm": 1.1049136263826071e+04
+  }
+}

@@ -1,0 +1,2 @@
+run_id,cfg,subset,shift_chain,eps,S_plus,S_minus,finite_difference,force_dot_direction,host_force_dot_direction,host_weighted_force_dot_direction,fd_minus_force_dot,fd_plus_force_dot,relative_error_same_sign,relative_error_opposite_sign,direction_norm,force_norm
+logdet_fd_12x32_eps1e5,1000,logdet_only,"0.0,0.0005,0.0015,0.0035,0.0075,0.0155",1e-05,9730.992567212019,9730.99231253026,12.734087977150919,-12.732749676538276,12.432309907179523,19.298166430071408,25.466837653689197,0.0013383006126428398,1.9998949040861786,0.00010509591382156185,525.8731133743247,21.463288418699815

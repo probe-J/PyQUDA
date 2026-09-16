@@ -63,6 +63,10 @@ class CloverHasenbuschConfig:
     force_output_scale: float = 1.0
     force_dagger: str = "yes"
     sym_odd_clover_scale: float = 1.0
+    # QUDA Hasenbusch twist mass 映射：Chroma mu -> QUDA mu/kappa。
+    # ratio 和 cancel 使用同一个 TwistedShiftedLinOp，因此两端都需缩放。
+    # None 表示按当前轻夸克质量自动计算 1/kappa。
+    mu_scale: Optional[float] = None
 
     def validated_shifts(self) -> List[float]:
         shifts = [float(value) for value in self.shifts]
@@ -145,6 +149,8 @@ def build_clover_hasenbusch_actions(
     """按 shift 链构造完整的两味 Clover Hasenbusch determinant 分解。"""
 
     shifts = config.validated_shifts()
+    kappa = 1 / (2 * (config.mass + latt_info.Nd))
+    mu_scale = 1 / kappa if config.mu_scale is None else config.mu_scale
     common = {
         "md_tol": config.md_tol,
         "action_tol": config.action_tol,
@@ -167,12 +173,12 @@ def build_clover_hasenbusch_actions(
         CloverWilsonHasenbuschTwistAction(
             latt_info,
             config.mass,
-            shift,
+            mu_scale * shift,
             config.tol,
             config.maxiter,
             config.clover_csw,
             determinant_ratio=True,
-            mu_prec=shifts[index + 1],
+            mu_prec=mu_scale * shifts[index + 1],
             ratio_force_source=config.ratio_force_source,
             ratio_force_mode=config.ratio_force_mode,
             label=f"has{index}_{shift:g}_to_{shifts[index + 1]:g}",
@@ -183,7 +189,7 @@ def build_clover_hasenbusch_actions(
     cancel = CloverWilsonHasenbuschTwistAction(
         latt_info,
         config.mass,
-        shifts[-1],
+        mu_scale * shifts[-1],
         config.tol,
         config.maxiter,
         config.clover_csw,

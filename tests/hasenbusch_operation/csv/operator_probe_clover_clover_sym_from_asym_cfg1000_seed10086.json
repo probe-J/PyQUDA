@@ -1,0 +1,15 @@
+{
+  "run_id": "clover_sym_from_asym_cfg1000_seed10086",
+  "cfg": "1000",
+  "seed": 10086,
+  "mass": -2.3999999999999999e-01,
+  "matpc_type": "odd_odd",
+  "expected_chroma_base_coeff": -2.5000000000000000e-01,
+  "fit": {
+    "coeff_real": -6.9143831959714477e-02,
+    "coeff_imag": -9.9548670191297752e-05,
+    "relative_residual": 9.0653523784836409e-01,
+    "target_norm": 1.8173374129870031e+03,
+    "base_norm": 1.1095018829031855e+04
+  }
+}

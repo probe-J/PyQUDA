@@ -1,0 +1,2 @@
+run_id,cfg,subset,monomial_index,monomial_label,eps,S_plus,S_minus,finite_difference,force_dot_direction,fd_plus_force_dot,relative_error_opposite_sign,force_norm
+cancel_fixed_fd_20260915,1000,cancel_only,0,has_cancel,1e-06,331329.88154957234,331329.8817470728,-98.75022806227207,114.68500218279951,15.934774120527436,0.13894383587427214,389.3278597648609

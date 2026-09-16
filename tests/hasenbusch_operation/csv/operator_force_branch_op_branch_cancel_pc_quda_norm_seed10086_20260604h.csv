@@ -1,0 +1,3 @@
+run_id,branch,eps,signed_bilinear_plus,signed_bilinear_minus,finite_difference,force_dot_direction,fd_plus_force_dot,fd_minus_force_dot
+op_branch_cancel_pc_quda_norm_seed10086_20260604h,minus_Mdag_XY,3e-05,-355106.0947751502,-355106.0891244803,-94.17783100313196,663.0811279449481,568.9032969418162,-757.25895894808
+op_branch_cancel_pc_quda_norm_seed10086_20260604h,plus_M_YX,3e-05,-355106.0947751501,-355106.0891244804,-94.1778290628766,-189.12609789788257,-283.30392696075916,94.94826883500598

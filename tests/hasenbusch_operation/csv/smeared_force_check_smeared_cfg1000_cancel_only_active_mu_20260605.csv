@@ -1,0 +1,2 @@
+run_id,cfg,subset,eps,S_plus,S_minus,finite_difference,force_dot_direction,fd_plus_force_dot,relative_error_opposite_sign,direction_norm,force_norm
+smeared_cfg1000_cancel_only_active_mu_20260605,1000,cancel_only,3e-05,249894.86164910515,249894.89220437373,-509.2544762495284,509.25481210497674,0.0003358554483270382,6.595037304385955e-07,526.0882639513972,319.6569105972002

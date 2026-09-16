@@ -1,0 +1,3 @@
+run_id,cfg,subset,shift_chain,eps,S_plus,S_minus,finite_difference,force_dot_direction,host_force_dot_direction,host_weighted_force_dot_direction,fd_minus_force_dot,fd_plus_force_dot,relative_error_same_sign,relative_error_opposite_sign,direction_norm,force_norm
+cancel_fd_12x32_mukappa_fullfix,1000,cancel_only,"0.0,0.0005,0.0015,0.0035,0.0075,0.0155",1e-05,332432.1617057002,332432.16046981333,61.79434421937912,-61.82292967259127,86.59825165727315,135.85918012818343,123.6172738919704,-0.02858545321215189,1.999537623768988,0.00046237623101231054,525.8993897755724,166.56255840303268
+5

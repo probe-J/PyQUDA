@@ -1,0 +1,2 @@
+run_id,cfg,subset,shift_chain,eps,S_plus,S_minus,finite_difference,force_dot_direction,host_force_dot_direction,host_weighted_force_dot_direction,fd_minus_force_dot,fd_plus_force_dot,relative_error_same_sign,relative_error_opposite_sign,direction_norm,force_norm
+forcefd_ratio_pair4_pc_quda_norm_seed10086_20260604e,1000,ratio_only,"0.0075,0.0155",3e-05,331329.8816557359,331329.8816399553,0.26301034570982057,476.24562652618624,281.24186701803865,476.24562652622797,-475.98261618047644,476.50863687189604,0.9994477422341319,1.000552257765868,1051.4280482037552,930.0685163548524

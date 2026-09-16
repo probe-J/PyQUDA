@@ -1,0 +1,3 @@
+run_id,cfg,subset,shift_chain,eps,S_plus,S_minus,finite_difference,force_dot_direction,host_force_dot_direction,host_weighted_force_dot_direction,fd_minus_force_dot,fd_plus_force_dot,relative_error_same_sign,relative_error_opposite_sign,direction_norm,force_norm
+ratio_fd_12x32_cswkappa_eps1e5,1000,ratio_only,"0.0,0.0005,0.0015,0.0035,0.0075,0.0155",1e-05,1658481.7111639315,1658481.7111630097,0.046088825911283486,-0.0461056413029155,0.003294440580530908,-0.003442413178089996,0.092194467214199,-1.6815391632014898e-05,0.092194467214199,1.6815391632014898e-05,525.8993897755724,0.01999102257184476
+

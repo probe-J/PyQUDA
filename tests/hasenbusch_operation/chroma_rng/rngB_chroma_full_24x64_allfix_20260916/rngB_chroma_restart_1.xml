@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+
+
+<Params>
+  <MCControl>
+<Cfg>
+  <cfg_type>SZINQIO</cfg_type>
+  <cfg_file>rngB_chroma_cfg_1.lime</cfg_file>
+  <parallel_io>false</parallel_io>
+  <reunit>true</reunit>
+</Cfg>
+    <RNG>
+      <Seed>
+        <elem>3222</elem>
+        <elem>485</elem>
+        <elem>230</elem>
+        <elem>1920</elem>
+      </Seed>
+    </RNG>
+    <StartUpdateNum>1</StartUpdateNum>
+    <NWarmUpUpdates>0</NWarmUpUpdates>
+    <NProductionUpdates>1</NProductionUpdates>
+    <NUpdatesThisRun>0</NUpdatesThisRun>
+    <SaveInterval>1</SaveInterval>
+    <SavePrefix>rngB_chroma</SavePrefix>
+    <SaveVolfmt>SINGLEFILE</SaveVolfmt>
+    <ParallelIO>false</ParallelIO>
+    <ReproCheckP>false</ReproCheckP>
+    <ReverseCheckP>true</ReverseCheckP>
+    <ReverseCheckFrequency>10</ReverseCheckFrequency>
+    <MonitorForces>true</MonitorForces><InlineMeasurements>
+      <elem>
+        <Name>PLAQUETTE</Name>
+        <Frequency>1</Frequency>
+        <Param>
+          <version>2</version>
+          <GaugeState>
+            <Name>SIMPLE_GAUGE_STATE</Name>
+            <GaugeBC>
+              <Name>PERIODIC_GAUGEBC</Name>
+            </GaugeBC>
+          </GaugeState>
+        </Param>
+        <NamedObject>
+          <gauge_id>default_gauge_field</gauge_id>
+        </NamedObject>
+      </elem>
+    </InlineMeasurements>
+</MCControl>
+  <HMCTrj>
+    <nrow>24 24 24 64</nrow><Monomials>
+      <elem>
+        <Name>N_FLAVOR_LOGDET_DIAG_FERM_MONOMIAL</Name>
+        <FermionAction>
+          <FermAct>SEOPREC_CLOVER</FermAct>
+          <Mass>-0.2790</Mass>
+          <clovCoeff>0.1559957304198659</clovCoeff>
+          <FermState>
+            <Name>STOUT_FERM_STATE</Name>
+            <rho>0.125</rho>
+            <n_smear>1</n_smear>
+            <FermionBC>
+              <FermBC>SIMPLE_FERMBC</FermBC>
+              <boundary>1 1 1 -1</boundary>
+            </FermionBC>
+          </FermState>
+        </FermionAction>
+        <num_flavors>2</num_flavors>
+        <NamedObject>
+          <monomial_id>HMC::logdet_2flav</monomial_id>
+        </NamedObject>
+      </elem>
+      <elem>
+        <Name>TWO_FLAVOR_SEOPREC_CONSTDET_RATIO_CONV_CONV_MULTIHASEN_FERM_MONOMIAL</Name>
+        <ShiftedMass>0 0.0005 0.0015 0.0035 0.0075 0.0155</ShiftedMass>
+        <NumofHasenTerms>5</NumofHasenTerms>
+        <Action>
+          <FermionAction>
+            <FermAct>SEOPREC_CLOVER</FermAct>
+            <Mass>-0.2790</Mass>
+            <clovCoeff>0.1559957304198659</clovCoeff>
+            <FermState>
+              <Name>STOUT_FERM_STATE</Name>
+              <rho>0.125</rho>
+              <n_smear>1</n_smear>
+              <FermionBC>
+                <FermBC>SIMPLE_FERMBC</FermBC>
+                <boundary>1 1 1 -1</boundary>
+              </FermionBC>
+            </FermState>
+          </FermionAction>
+          <InvertParam>
+            <invType>CG_INVERTER</invType>
+            <RsdCG>1.0e-6</RsdCG>
+            <MaxCG>5000</MaxCG>
+          </InvertParam>
+        </Action>
+        <NamedObject>
+          <monomial_id>HMC::has</monomial_id>
+        </NamedObject>
+      </elem>
+      <elem>
+        <Name>TWO_FLAVOR_SEOPREC_CONSTDET_MULTIHASEN_CANCEL_FERM_MONOMIAL</Name>
+        <ShiftedMass>0.0155</ShiftedMass>
+        <FermionAction>
+          <FermAct>SEOPREC_CLOVER</FermAct>
+          <Mass>-0.2790</Mass>
+          <clovCoeff>0.1559957304198659</clovCoeff>
+          <FermState>
+            <Name>STOUT_FERM_STATE</Name>
+            <rho>0.125</rho>
+            <n_smear>1</n_smear>
+            <FermionBC>
+              <FermBC>SIMPLE_FERMBC</FermBC>
+              <boundary>1 1 1 -1</boundary>
+            </FermionBC>
+          </FermState>
+        </FermionAction>
+        <InvertParam>
+          <invType>CG_INVERTER</invType>
+          <RsdCG>1.0e-6</RsdCG>
+          <MaxCG>5000</MaxCG>
+        </InvertParam>
+        <NamedObject>
+          <monomial_id>HMC::has_cancel</monomial_id>
+        </NamedObject>
+      </elem>
+      <elem>
+        <Name>GAUGE_MONOMIAL</Name>
+        <GaugeAction>
+          <Name>LW_1LOOP_GAUGEACT</Name>
+          <beta>6.2</beta>
+          <u0>0.855453</u0>
+          <GaugeBC>
+            <Name>PERIODIC_GAUGEBC</Name>
+          </GaugeBC>
+        </GaugeAction>
+        <NamedObject>
+          <monomial_id>HMC::gauge</monomial_id>
+        </NamedObject>
+      </elem>
+      <elem>
+        <Name>ONE_FLAVOR_SEOPREC_CONSTDET_FERM_RAT_MONOMIAL</Name>
+        <num_pf>1</num_pf>
+        <Action>
+          <FermionAction>
+            <FermAct>SEOPREC_CLOVER</FermAct>
+            <Mass>-0.2400</Mass>
+            <clovCoeff>0.15437768959902154</clovCoeff>
+            <FermState>
+              <Name>STOUT_FERM_STATE</Name>
+              <rho>0.125</rho>
+              <n_smear>1</n_smear>
+              <FermionBC>
+                <FermBC>SIMPLE_FERMBC</FermBC>
+                <boundary>1 1 1 -1</boundary>
+              </FermionBC>
+            </FermState>
+          </FermionAction>
+          <ActionApprox>
+            <RationalApprox>
+              <ratApproxType>READ_COEFFS</ratApproxType>
+              <ApproxInfo>
+                <lowerMin>0.0007</lowerMin>
+                <upperMax>32</upperMax>
+                <numPower>1</numPower>
+                <denPower>4</denPower>
+                <degree>15</degree>
+                <error>0</error>
+              </ApproxInfo>
+              <PFECoeffs>
+                <norm>0.16377062371844092</norm>
+                <res>0.00045695059327414787 0.0009330700192111247 0.0017326036776494208 0.0032533419709504436 0.0061822319800770636 0.01182379314240938 0.022689323380059186 0.043647037712528695 0.084255260596790435 0.16383410566781278 0.32404867058798081 0.66767451307330494 1.5201189069384913 4.4678728957489406 28.589450278328361</res>
+                <pole>5.5583559077544364e-05 0.00041675586436430712 0.001395758808179072 0.0037830761938789734 0.0095064326614997408 0.023189559723108977 0.055899362108346812 0.13416418443485531 0.32187494798962152 0.77466929083709257 1.8820254251941042 4.6816441017887183 12.36089073106459 38.34226077900491 204.87322186118539</pole>
+              </PFECoeffs>
+              <IPFECoeffs>
+                <norm>6.1061011877150095</norm>
+                <res>-5.9026282653843501e-06 -2.6336338722683403e-05 -8.6216035560635195e-05 -0.00026398425828645308 -0.00079281031971572202 -0.0023658197738557554 -0.0070474612511414944 -0.021013171584700382 -0.062924223344397609 -0.19053810412921496 -0.5928163428146106 -1.9699244119427768 -7.7070557474027375 -46.554409104689981 -1281.7005333928757</res>
+                <pole>0.00010933590928333925 0.00058421176907402339 0.0018121671396791636 0.0047846439227282617 0.011902070875418572 0.028915564699608782 0.069592244254816207 0.16695961067669693 0.40072013624383146 0.96595193127698076 2.3562992341720501 5.9211072820164858 16.048618048288287 53.748493819439197 402.99686403221978</pole>
+              </IPFECoeffs>
+            </RationalApprox>
+            <InvertParam>
+              <invType>CG_INVERTER</invType>
+              <RsdCG>1e-6</RsdCG>
+              <MaxCG>5000</MaxCG>
+            </InvertParam>
+          </ActionApprox>
+          <ForceApprox>
+            <RationalApprox>
+              <ratApproxType>READ_COEFFS</ratApproxType>
+              <ApproxInfo>
+                <lowerMin>0.0007</lowerMin>
+                <upperMax>32</upperMax>
+                <numPower>1</numPower>
+                <denPower>2</denPower>
+                <degree>12</degree>
+                <error>0</error>
+              </ApproxInfo>
+              <PFECoeffs>
+                <norm>0.030392017845961267</norm>
+                <res>0.0094310861834569805 0.012249993015850844 0.018730802905677708 0.030813033002552767 0.052120655591922638 0.089087058577498365 0.15309012000021471 0.26493803350898992 0.46676025150135786 0.86622365664601453 1.8819154073627016 6.9603376973919229</res>
+                <pole>5.2304529220178517e-05 0.00056921418225554851 0.0022672420713538877 0.0073286108330247101 0.022260888291937779 0.066288689103056853 0.19631942040178924 0.58237815990332287 1.7466427177166819 5.425692162972215 18.850085313507968 99.621316607217381</pole>
+              </PFECoeffs>
+              <IPFECoeffs>
+                <norm>0.030392017845961267</norm>
+                <res>0.0094310861834569805 0.012249993015850844 0.018730802905677708 0.030813033002552767 0.052120655591922638 0.089087058577498365 0.15309012000021471 0.26493803350898992 0.46676025150135786 0.86622365664601453 1.8819154073627016 6.9603376973919229</res>
+                <pole>5.2304529220178517e-05 0.00056921418225554851 0.0022672420713538877 0.0073286108330247101 0.022260888291937779 0.066288689103056853 0.19631942040178924 0.58237815990332287 1.7466427177166819 5.425692162972215 18.850085313507968 99.621316607217381</pole>
+              </IPFECoeffs>
+            </RationalApprox>
+            <InvertParam>
+              <invType>CG_INVERTER</invType>
+              <RsdCG>1e-6</RsdCG>
+              <MaxCG>5000</MaxCG>
+            </InvertParam>
+          </ForceApprox>
+        </Action>
+        <NamedObject>
+          <monomial_id>HMC::strange</monomial_id>
+        </NamedObject>
+      </elem>
+    </Monomials>
+<Hamiltonian>
+      <monomial_ids>
+        <elem>HMC::logdet_2flav</elem>
+        <elem>HMC::has</elem>
+        <elem>HMC::has_cancel</elem>
+        <elem>HMC::gauge</elem>
+        <elem>HMC::strange</elem>
+      </monomial_ids>
+    </Hamiltonian>
+<MDIntegrator>
+      <tau0>0.1</tau0>
+      <Integrator>
+        <Name>LCM_STS_FORCE_GRAD</Name>
+        <n_steps>14</n_steps>
+        <monomial_ids>
+          <elem>HMC::has</elem>
+          <elem>HMC::strange</elem>
+        </monomial_ids>
+        <SubIntegrator>
+          <Name>LCM_STS_FORCE_GRAD</Name>
+          <n_steps>2</n_steps>
+          <monomial_ids>
+            <elem>HMC::gauge</elem>
+            <elem>HMC::logdet_2flav</elem>
+            <elem>HMC::has_cancel</elem>
+          </monomial_ids>
+        </SubIntegrator>
+      </Integrator>
+    </MDIntegrator>
+</HMCTrj>
+</Params>

@@ -1,0 +1,3 @@
+run_id,cfg,subset,shift_chain,eps,S_plus,S_minus,finite_difference,force_dot_direction,host_force_dot_direction,host_weighted_force_dot_direction,fd_minus_force_dot,fd_plus_force_dot,relative_error_same_sign,relative_error_opposite_sign,direction_norm,force_norm
+force_check_24x64_cancel_fd_tol1e14_20260915,1000,cancel_only,"0.0,0.0005,0.0015,0.0035,0.0075,0.0155",0.0001,5309184.984389702,5309185.211075107,-1133.4270238876343,1133.4361254284158,567.7099337013374,1114.9042983573195,-2266.86314931605,0.00910154078155756,1.9999919699570383,8.030042961721695e-06,2102.4670080576916,671.4326197682224
+1
