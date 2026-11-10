@@ -1,0 +1,11 @@
+# 所有验证产物留在运行目录，禁止随代码提交。
+/results/
+/runs/
+/.cache/
+/build/
+__pycache__/
+*.pyc
+*.rank[0-9]*
+*.log
+*.lime
+*.npy

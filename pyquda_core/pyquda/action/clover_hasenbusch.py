@@ -1,5 +1,6 @@
 from typing import Optional
 
+import math
 import numpy
 
 from pyquda_comm import getLogger
@@ -63,6 +64,15 @@ class CloverWilsonLogDetAction(FermionAction):
         self.ck = -kappa * clover_csw / 8
         self.nvector = 1
         self.multiplicity = n_flavor
+        # Chroma 的 direct clover 比 QUDA 归一化 clover 多乘 (mass + Nd) = 1/(2*kappa)。
+        # logdet 因此需要补 12*V*log(mass+Nd)；该常数不改变 force。
+        self.chroma_logdet_constant = (
+            -self.multiplicity
+            * self.latt_info.Ns
+            * self.latt_info.Nc
+            * self.latt_info.global_volume
+            * math.log(mass + self.latt_info.Nd)
+        )
         self.quark = MultiLatticeFermion(latt_info, self.nvector)
         self.force_tmp = LatticeGauge(latt_info)
 
@@ -84,7 +94,10 @@ class CloverWilsonLogDetAction(FermionAction):
         self.invert_param.compute_clover_trlog = 1
         self.updateClover()
         self.invert_param.compute_clover_trlog = 0
-        return -self.multiplicity * (self.invert_param.trlogA[0] + self.invert_param.trlogA[1])
+        return (
+            -self.multiplicity * (self.invert_param.trlogA[0] + self.invert_param.trlogA[1])
+            + self.chroma_logdet_constant
+        )
 
     def _add_sigma_trace_force(self, force: LatticeGauge, matpc_type: QudaMatPCType) -> None:
         old_matpc = self.invert_param.matpc_type
@@ -207,6 +220,10 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
         # 诊断旋钮：只缩放 symmetric odd-odd 展开中的 active odd clover 导数项。
         # 默认 1.0 保持原实现，用于定位 A_oo insertion 的 QUDA/Chroma 归一化差异。
         self.sym_odd_clover_scale = float(sym_odd_clover_scale)
+        kappa = 1 / (2 * (mass + latt_info.Nd))
+        # QUDA MatPC 的 Clover/Wilson force 基与 Chroma direct clover 相差
+        # clover_csw/kappa = 1/v0^3；pc_quda_norm 的 base 和 shift 项都需要该因子。
+        self.quda_norm_force_scale = clover_csw / kappa
         matpc_map = {
             "even_even_asymmetric": QudaMatPCType.QUDA_MATPC_EVEN_EVEN_ASYMMETRIC,
             "odd_odd_asymmetric": QudaMatPCType.QUDA_MATPC_ODD_ODD_ASYMMETRIC,
@@ -360,11 +377,18 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
             else:
                 self.updateClover()
             self._solve(self.phi, self.mu, compute_action=True)
-            action = self.invert_param.action[0] - self.latt_info.volume // 2 * self.latt_info.Ns * self.latt_info.Nc
             if not self.constdet:
+                # 非 const-det 分支保留原来的零点扣除和 trlog 项。
+                action = (
+                    self.invert_param.action[0]
+                    - self.latt_info.global_volume // 2 * self.latt_info.Ns * self.latt_info.Nc
+                )
                 # asymmetric Schur complement 要补回被消去 checkerboard 的 clover determinant。
                 trlog_index = 1 if self._active_parity() == QudaParity.QUDA_EVEN_PARITY else 0
                 action -= self.multiplicity * self.invert_param.trlogA[trlog_index]
+            else:
+                # Chroma const-det cancel monomial 没有零点常数扣除。
+                action = self.invert_param.action[0]
             return action
 
     def _parity_field(self, field: LatticeFermion, parity: QudaParity) -> LatticeFermion:
@@ -695,6 +719,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 sign * -0.5 * self.sym_odd_clover_scale,
                 f"{label}: sym PLUS A_oo^-1 insertion",
                 include_hopping=False,
+                swap_pair_fields=not plus,
             )
 
             # D_oe 导数项：pre-final 为负号，乘最终 -0.5 后为 +0.5。
@@ -705,6 +730,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 sign * 0.5,
                 f"{label}: sym PLUS D_oe prime",
                 include_clover=False,
+                swap_pair_fields=not plus,
             )
 
             # inactive even A^{-1} 导数项。
@@ -718,6 +744,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 sign * -0.5,
                 f"{label}: sym PLUS A_ee^-1 insertion",
                 include_hopping=False,
+                swap_pair_fields=not plus,
             )
 
             # D_eo 导数项。
@@ -729,6 +756,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 sign * 0.5,
                 f"{label}: sym PLUS D_eo prime",
                 include_clover=False,
+                swap_pair_fields=not plus,
             )
         else:
             # M_eo_psi = -0.5 * D_eo^dag A_oo^{-dag} psi。
@@ -757,6 +785,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 sign * -0.5,
                 f"{label}: sym MINUS A_ee^-1 insertion",
                 include_hopping=False,
+                swap_pair_fields=not plus,
             )
 
             # D_oe^dag 导数项。
@@ -767,6 +796,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 sign * 0.5,
                 f"{label}: sym MINUS D_oe prime",
                 include_clover=False,
+                swap_pair_fields=not plus,
             )
 
             # D_eo^dag 导数项。
@@ -778,6 +808,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 sign * 0.5,
                 f"{label}: sym MINUS D_eo prime",
                 include_clover=False,
+                swap_pair_fields=not plus,
             )
 
             # active odd A^{-1} 导数项。
@@ -791,6 +822,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 sign * -0.5 * self.sym_odd_clover_scale,
                 f"{label}: sym MINUS A_oo^-1 insertion",
                 include_hopping=False,
+                swap_pair_fields=not plus,
             )
 
         if include_shift:
@@ -914,6 +946,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
         dagger: QudaDagType,
         sign: float,
         label: str,
+        norm_scale: Optional[float] = None,
     ) -> None:
         """展开 QUDA symmetric odd-odd MatPC 的真实归一化导数。
 
@@ -921,6 +954,8 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
         `I - kappa^2 * base + (±mu/2) * i gamma5 A`。
         因此这里直接使用 `-kappa^2` 和 `±mu/2`，不再沿用 Chroma
         symmetric linop 的 `-0.5` hopping 归一化。
+        两个系数还需乘 clover_csw/kappa = 1/v0^3，才能落在 Chroma
+        direct clover 的 force 基上。
         """
         active = self._active_parity()
         if active != QudaParity.QUDA_ODD_PARITY:
@@ -929,10 +964,14 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
         plus = dagger == QudaDagType.QUDA_DAG_NO
         chi_odd = self._active_pc_field(chi)
         psi_odd = self._active_pc_field(psi)
-        base_alpha = sign * (-(self.invert_param.kappa**2))
+        quda_norm_scale = self.quda_norm_force_scale if norm_scale is None else norm_scale
+        base_alpha = sign * (-(self.invert_param.kappa**2)) * quda_norm_scale
         active_mu = self.invert_param.mu
         # ratio force 中 D_prec 分支会临时切到 mu_prec；shift 导数必须跟随 active mu。
-        shift_alpha = sign * (0.5 * active_mu if plus else -0.5 * active_mu)
+        shift_alpha = (
+            sign * (0.5 * active_mu if plus else -0.5 * active_mu)
+            * quda_norm_scale
+        )
 
         if plus:
             # base = A_oo^-1 D_oe A_ee^-1 D_eo psi。
@@ -1053,21 +1092,26 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
         include_clover: bool = True,
         include_hopping: bool = True,
         symmetric_clover: bool = False,
+        swap_pair_fields: bool = False,
     ) -> None:
         # 该 helper 只做一个 Chroma deriv(left,right,±) 的 bilinear force 项；
         # 四项 ratio 组合和整体符号在调用处显式列出，便于 finite-difference 对照。
-        self.pair_x[0] = x_field
-        self.pair_p[0] = p_field
-        self.force_tmp.data = 0
-        coeff = numpy.array(sign * self.coeff, "<f8") if include_hopping else numpy.zeros_like(self.coeff)
-        if include_clover:
-            epsilon_even = numpy.array(sign * self.epsilon_even, "<f8")
-            epsilon_odd_src = self.epsilon_even if symmetric_clover else self.epsilon_odd
-            epsilon_odd = numpy.array(sign * epsilon_odd_src, "<f8")
+        if swap_pair_fields:
+            self.pair_x[0] = p_field
+            self.pair_p[0] = x_field
         else:
-            # const-det D-link 项不应携带 clover sigma derivative；只保留 hopping/gauge-link force。
-            epsilon_even = numpy.zeros_like(self.epsilon_even)
-            epsilon_odd = numpy.zeros_like(self.epsilon_odd)
+            self.pair_x[0] = x_field
+            self.pair_p[0] = p_field
+        self.force_tmp.data = 0
+        # pc_pair 的数学系数已经由 sign 显式给出；这里直接映射到 pair-force kernel，
+        # 不再重复乘 4*kappa^2 或使用旧 epsilon_even/epsilon_odd 归一化。
+        # 有限差分显示 pc_pair 的 Chroma -0.5 展开还需乘 QUDA kappa 归一化。
+        # 保留原公共诊断倍率的作用，但不重复原 coeff 中的 4*kappa^2。
+        pair_scale = sign * self.force_sign * self.force_coeff_scale
+        coeff = numpy.array([-pair_scale * self.invert_param.kappa if include_hopping else 0.0], "<f8")
+        epsilon_value = -self.ck * pair_scale * self.invert_param.kappa if include_clover else 0.0
+        epsilon_even = numpy.array([epsilon_value], "<f8")
+        epsilon_odd = numpy.array([epsilon_value], "<f8")
         full_label = f"{self.label}: {label}"
         enabled = self.force_term_filter is None or self.force_term_filter in (label, full_label)
         if not enabled:
@@ -1157,18 +1201,18 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
             old_mu_for_pc = self.invert_param.mu
             self.invert_param.mu = self.mu_prec
             if self._is_symmetric_matpc():
-                self._add_sym_oddodd_chroma_deriv_force(force_out, self.phi, self.quark[0], QudaDagType.QUDA_DAG_NO, +1.0, "D_prec(phi,X)")
-                self._add_sym_oddodd_chroma_deriv_force(force_out, self.quark[0], self.phi, QudaDagType.QUDA_DAG_YES, +1.0, "D_prec(X,phi)")
+                self._add_sym_oddodd_chroma_deriv_force(force_out, self.phi, self.quark[0], QudaDagType.QUDA_DAG_NO, -1.0, "D_prec(phi,X)")
+                self._add_sym_oddodd_chroma_deriv_force(force_out, self.quark[0], self.phi, QudaDagType.QUDA_DAG_YES, -1.0, "D_prec(X,phi)")
             else:
-                self._add_eoprec_deriv_force(force_out, self.phi, self.quark[0], QudaDagType.QUDA_DAG_NO, +1.0, "D_prec(phi,X)", include_quda_twist)
-                self._add_eoprec_deriv_force(force_out, self.quark[0], self.phi, QudaDagType.QUDA_DAG_YES, +1.0, "D_prec(X,phi)", include_quda_twist)
+                self._add_eoprec_deriv_force(force_out, self.phi, self.quark[0], QudaDagType.QUDA_DAG_NO, -1.0, "D_prec(phi,X)", include_quda_twist)
+                self._add_eoprec_deriv_force(force_out, self.quark[0], self.phi, QudaDagType.QUDA_DAG_YES, -1.0, "D_prec(X,phi)", include_quda_twist)
             self.invert_param.mu = self.mu
             if self._is_symmetric_matpc():
-                self._add_sym_oddodd_chroma_deriv_force(force_out, self.quark[0], self.y, QudaDagType.QUDA_DAG_YES, -1.0, "-D(X,Y)")
-                self._add_sym_oddodd_chroma_deriv_force(force_out, self.y, self.quark[0], QudaDagType.QUDA_DAG_NO, -1.0, "-D(Y,X)")
+                self._add_sym_oddodd_chroma_deriv_force(force_out, self.quark[0], self.y, QudaDagType.QUDA_DAG_YES, +1.0, "-D(X,Y)")
+                self._add_sym_oddodd_chroma_deriv_force(force_out, self.y, self.quark[0], QudaDagType.QUDA_DAG_NO, +1.0, "-D(Y,X)")
             else:
-                self._add_eoprec_deriv_force(force_out, self.quark[0], self.y, QudaDagType.QUDA_DAG_YES, -1.0, "-D(X,Y)", include_quda_twist)
-                self._add_eoprec_deriv_force(force_out, self.y, self.quark[0], QudaDagType.QUDA_DAG_NO, -1.0, "-D(Y,X)", include_quda_twist)
+                self._add_eoprec_deriv_force(force_out, self.quark[0], self.y, QudaDagType.QUDA_DAG_YES, +1.0, "-D(X,Y)", include_quda_twist)
+                self._add_eoprec_deriv_force(force_out, self.y, self.quark[0], QudaDagType.QUDA_DAG_NO, +1.0, "-D(Y,X)", include_quda_twist)
             self.invert_param.mu = old_mu_for_pc
         elif self.determinant_ratio and force_out is not None and self.ratio_force_mode == "pc_quda_norm":
             if not self._is_symmetric_matpc():
@@ -1188,6 +1232,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 QudaDagType.QUDA_DAG_NO,
                 -1.0,
                 f"{label_prefix} +(phi,X)",
+                norm_scale=1.0,
             )
             self._add_sym_oddodd_quda_norm_deriv_force(
                 force_out,
@@ -1196,6 +1241,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 QudaDagType.QUDA_DAG_YES,
                 -1.0,
                 f"{label_prefix} +(X,phi)dag",
+                norm_scale=1.0,
             )
             self.invert_param.mu = self.mu
             self._add_sym_oddodd_quda_norm_deriv_force(
@@ -1205,6 +1251,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 QudaDagType.QUDA_DAG_YES,
                 +1.0,
                 f"{d_label_prefix} -(X,Y)dag",
+                norm_scale=1.0,
             )
             self._add_sym_oddodd_quda_norm_deriv_force(
                 force_out,
@@ -1213,19 +1260,34 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
                 QudaDagType.QUDA_DAG_NO,
                 +1.0,
                 f"{d_label_prefix} -(Y,X)",
+                norm_scale=1.0,
             )
             self.invert_param.mu = old_mu_for_pc
         elif (not self.determinant_ratio) and force_out is not None and self.cancel_force_mode in ("pc_pair", "pc_quda_twist"):
-            # Chroma cancel: X=(M^dag M)^-1 phi, Y=M X，dsdq = -[D^dag(X,Y)+D(Y,X)]。
-            # 这里直接写入 momentum force 约定下的候选项，后续用 FD+force 闭合判据验证。
+            # Chroma cancel: X=(M^dag M)^-1 phi, Y=M X，源码公式为
+            # -[deriv(X,Y,MINUS)+deriv(Y,X,PLUS)]。QUDA pair kernel 的单个
+            # PLUS 调用已经包含前向/后向 link 的共轭组合，因此只调用一次并取 -1。
             include_quda_twist = self.cancel_force_mode == "pc_quda_twist"
             self._mat(self.y, self.quark[0], QudaDagType.QUDA_DAG_NO, self.mu)
             if self._is_symmetric_matpc():
-                self._add_sym_oddodd_chroma_deriv_force(force_out, self.quark[0], self.y, QudaDagType.QUDA_DAG_YES, -1.0, "cancel -Ddag(X,Y)")
-                self._add_sym_oddodd_chroma_deriv_force(force_out, self.y, self.quark[0], QudaDagType.QUDA_DAG_NO, -1.0, "cancel -D(Y,X)")
+                self._add_sym_oddodd_chroma_deriv_force(
+                    force_out,
+                    self.y,
+                    self.quark[0],
+                    QudaDagType.QUDA_DAG_NO,
+                    -1.0,
+                    "cancel pc_pair -M(Y,X)",
+                )
             else:
-                self._add_eoprec_deriv_force(force_out, self.quark[0], self.y, QudaDagType.QUDA_DAG_YES, -1.0, "cancel -Ddag(X,Y)", include_quda_twist)
-                self._add_eoprec_deriv_force(force_out, self.y, self.quark[0], QudaDagType.QUDA_DAG_NO, -1.0, "cancel -D(Y,X)", include_quda_twist)
+                self._add_eoprec_deriv_force(
+                    force_out,
+                    self.y,
+                    self.quark[0],
+                    QudaDagType.QUDA_DAG_NO,
+                    -1.0,
+                    "cancel pc_pair -M(Y,X)",
+                    include_quda_twist,
+                )
         elif (not self.determinant_ratio) and force_out is not None and self.cancel_force_mode == "pc_quda_norm":
             # QUDA-normalized cancel: X=(M^dag M)^-1 phi, Y=M X。
             # Chroma 的显式力写作 -[M^dag'(X,Y)+M'(Y,X)]；但 QUDA pair-force kernel
@@ -1234,8 +1296,26 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
             if not self._is_symmetric_matpc():
                 getLogger().critical("pc_quda_norm requires symmetric odd_odd/even_even MatPC", NotImplementedError)
             self._mat(self.y, self.quark[0], QudaDagType.QUDA_DAG_NO, self.mu)
-            # cancel action 是 MdagM 型；只保留 PLUS 组时，系数需要覆盖 M 和 Mdag 两支导数。
-            self._add_sym_oddodd_quda_norm_deriv_force(force_out, self.y, self.quark[0], QudaDagType.QUDA_DAG_NO, +2.0, "cancel quda-kernel -M(Y,X)")
+            # Chroma cancel: -[deriv(X,Y,MINUS)+deriv(Y,X,PLUS)]。
+            # 这里按同一 QUDA MatPC 导数基展开为两项，不再使用 +2 单项近似。
+            self._add_sym_oddodd_quda_norm_deriv_force(
+                force_out,
+                self.quark[0],
+                self.y,
+                QudaDagType.QUDA_DAG_YES,
+                +1.0,
+                "cancel quda-kernel -Mdag(X,Y)",
+                norm_scale=1.0,
+            )
+            self._add_sym_oddodd_quda_norm_deriv_force(
+                force_out,
+                self.y,
+                self.quark[0],
+                QudaDagType.QUDA_DAG_NO,
+                +1.0,
+                "cancel quda-kernel -M(Y,X)",
+                norm_scale=1.0,
+            )
         elif (not self.determinant_ratio) and force_out is not None and self.cancel_force_mode == "pc_constdet":
             # Chroma const-det cancel: diffM.deriv(F,X,Y,MINUS)+diffM.deriv(F_tmp,Y,X,PLUS)，再整体乘 -1。
             # 该模式只用于验证 const-det cancel 力是否闭合，不包含 clover trlog/sigma-trace 项。
