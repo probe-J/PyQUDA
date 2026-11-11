@@ -1,3 +1,8 @@
+"""Clover Hasenbusch action；输入伪费米子与 resident gauge，输出能量或力。
+
+solver_accel 可在构造时配置，也可由 HMC 在首次求解前配置；采样/能量保持 CG。
+"""
+
 from typing import Optional
 
 import math
@@ -29,6 +34,7 @@ from ..enum_quda import (
     QudaTwistFlavorType,
 )
 from ..dirac import CloverWilsonDirac
+from ..solver_accel import SolverAcceleration, parameter_scope
 from .abstract import FermionAction
 
 nullptr = numpy.empty((0, 0), "<c16")
@@ -191,6 +197,7 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
         sym_odd_clover_scale: float = 1.0,
         matpc_type: str = "even_even_asymmetric",
         label: str = "",
+        solver_accel=None,
     ) -> None:
         if latt_info.anisotropy != 1.0:
             getLogger().critical("anisotropy != 1.0 not implemented", NotImplementedError)
@@ -317,34 +324,29 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
         self.invert_param.dslash_type = QudaDslashType.QUDA_CLOVER_HASENBUSCH_TWIST_DSLASH
         self.invert_param.mu = mu
         self.invert_param.twist_flavor = QudaTwistFlavorType.QUDA_TWIST_SINGLET
+        self.solver_accel = SolverAcceleration(self, solver_accel)
 
     def updateClover(self):
         loadGaugeQuda(nullptr, self.gauge_param)
         loadCloverQuda(nullptr_clover, nullptr_clover, self.invert_param)
+        self.solver_accel.gauge_updated()
 
     def _mat(self, out: LatticeFermion, inp: LatticeFermion, dagger: QudaDagType, mu: Optional[float] = None):
-        old_mu = self.invert_param.mu
-        old_dagger = self.invert_param.dagger
-        if mu is not None:
-            self.invert_param.mu = mu
-        self.invert_param.dagger = dagger
-        MatQuda(out.even_ptr, inp.even_ptr, self.invert_param)
-        self.invert_param.dagger = old_dagger
-        self.invert_param.mu = old_mu
+        with parameter_scope(self.invert_param, mu=self.invert_param.mu if mu is None else mu, dagger=dagger):
+            MatQuda(out.even_ptr, inp.even_ptr, self.invert_param)
 
-    def _solve(self, rhs: Optional[LatticeFermion] = None, mu: Optional[float] = None, compute_action: bool = False):
-        old_mu = self.invert_param.mu
-        old_tol = self.invert_param.tol
-        if mu is not None:
-            self.invert_param.mu = mu
-        # action 用严格残差保证 Metropolis 能量；refresh/force 使用头文件的 MD 残差。
-        self.invert_param.tol = self.action_tol if compute_action else self.md_tol
-        self.invert_param.compute_action = int(compute_action)
-        invertQuda(self.quark[0].even_ptr, (rhs or self.phi).even_ptr, self.invert_param)
-        self.dirac.performance()
-        self.invert_param.compute_action = 0
-        self.invert_param.tol = old_tol
-        self.invert_param.mu = old_mu
+    def _solve(self, rhs: Optional[LatticeFermion] = None, mu: Optional[float] = None,
+               compute_action: bool = False, *, md: bool = False):
+        # 只有显式 MD force 可走 MG；异常也恢复 mu/tol/compute_action。
+        rhs = self.phi if rhs is None else rhs
+        with parameter_scope(self.invert_param, mu=self.invert_param.mu if mu is None else mu,
+                             tol=self.action_tol if compute_action else self.md_tol,
+                             compute_action=int(compute_action)):
+            if md and not compute_action:
+                self.solver_accel.solve(self.quark[0], rhs, self.invert_param, self.dirac.performance)
+            else:
+                self.solver_accel.solve_plain(self.quark[0], rhs, self.invert_param,
+                                              self.dirac.performance, compute_action=compute_action)
 
     def sample(self):
         self.sampleEta()
@@ -1155,10 +1157,10 @@ class CloverWilsonHasenbuschTwistAction(FermionAction):
             # X=(M^dag M)^-1 M_prec^dag phi, Y=M X,
             # dS = +D_prec(phi,X) -D(X,Y) -D(Y,X) +D_prec(X,phi)。
             self._mat(self.rhs, self.phi, QudaDagType.QUDA_DAG_YES, self.mu_prec)
-            self._solve(self.rhs, self.mu, compute_action=False)
+            self._solve(self.rhs, self.mu, compute_action=False, md=True)
             self._mat(self.y, self.quark[0], QudaDagType.QUDA_DAG_NO, self.mu)
         else:
-            self._solve(self.phi, self.mu, compute_action=False)
+            self._solve(self.phi, self.mu, compute_action=False, md=True)
             if self.constdet:
                 # const-det cancel 只需要伪费米子力；传入零 x0 让 QUDA 跳过 sigma-trace 且不添加 detratio source。
                 self.source.data = 0

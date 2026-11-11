@@ -1,0 +1,19 @@
+{
+  "plain_precision": "double",
+  "predictor": {
+    "enabled": false,
+    "formulation": "normal"
+  },
+  "multigrid": {
+    "enabled": true,
+    "force_gradient": true,
+    "block_size": [2, 2, 2, 2],
+    "n_vec": 24,
+    "setup_maxiter": 500,
+    "refresh_maxiter": 500,
+    "setup_tol": 0.000005,
+    "refresh_threshold": 100,
+    "setup_seed": 1234,
+    "seed_backend": "api"
+  }
+}

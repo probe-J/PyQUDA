@@ -5,7 +5,7 @@
 """
 
 from dataclasses import dataclass
-from typing import List, Optional, Sequence, Type
+from typing import Dict, List, Optional, Sequence, Tuple, Type
 
 from .action import (
     CloverWilsonAction,
@@ -16,6 +16,89 @@ from .action import (
 from .action.abstract import Action, FermionAction, LoopParam, RationalParam
 from .field import LatticeInfo
 from .hmc import HMC, Integrator
+
+
+def build_clover_hmc_from_monomials(
+    latt_info: LatticeInfo,
+    monomials: Sequence[dict],
+    gauge_loop_param: LoopParam,
+    beta: float,
+    inner_ids: Sequence[str],
+    outer_ids: Sequence[str],
+    sampling_ids: Sequence[str],
+    outer_integrator: Integrator,
+    inner_integrator: Integrator,
+    stout: "StoutHMCConfig",
+    *,
+    solver_accel=None,
+) -> Tuple[HMC, Dict[str, Action]]:
+    """从已消除 H/MD 别名的声明构造标量裸质量分解，不用 twist 代替质量。
+
+    输入的每个 id 必须只在一个积分层出现，赝费米子必须恰好采样一次。
+    role 可为 gauge/logdet/ratio/cancel/strange。ratio 显式传 mass 和
+    mass_precond；strange 的 rational 系数由调用方从头文件/配置传入。
+    返回 HMC 和 id->action，供 RNG 注入与诊断复用；不执行 I/O 或 MD。
+    该入口显式使用双精度 CG 计算采样/能量，MG 仅可用于 ratio/cancel 的 MD。
+    """
+    from .action.clover_mass_ratio import CloverWilsonScalarMassRatioAction
+    from .enum_quda import QudaPrecision
+
+    rows = list(monomials)
+    ids = [row["id"] for row in rows]
+    placed = list(inner_ids) + list(outer_ids)
+    if len(ids) != len(set(ids)) or len(placed) != len(set(placed)) or set(placed) != set(ids):
+        raise ValueError("each physical monomial must occur exactly once in the integrator")
+    stochastic = {row["id"] for row in rows if row["role"] in ("ratio", "cancel", "strange")}
+    if len(sampling_ids) != len(set(sampling_ids)) or set(sampling_ids) != stochastic:
+        raise ValueError("sampling_ids must refresh each pseudofermion exactly once")
+    if any(row["role"] not in ("gauge", "logdet", "ratio", "cancel", "strange") for row in rows):
+        raise ValueError("unknown Clover monomial role")
+
+    def use_double(action):
+        precision = QudaPrecision.QUDA_DOUBLE_PRECISION
+        action.dirac.setPrecision(cuda=precision, sloppy=precision, refinement_sloppy=precision,
+                                  precondition=precision, eigensolver=precision)
+        for name in ("numer", "denom", "_sym_force_helper"):
+            child = getattr(action, name, None)
+            if child is not None:
+                use_double(child)
+
+    actions = {}
+    for row in rows:
+        role = row["role"]
+        if role == "gauge":
+            action = GaugeAction(latt_info, gauge_loop_param, beta)
+        else:
+            common = (row["tol"], row["maxiter"], row["clover_csw"])
+            if role == "ratio":
+                action = CloverWilsonScalarMassRatioAction(
+                    latt_info, row["mass"], row["mass_precond"], *common,
+                    md_tol=row.get("md_tol", row["tol"]),
+                    action_tol=row.get("action_tol", row["tol"]),
+                    label=row["id"], solver_accel=solver_accel)
+            elif role == "cancel":
+                action = CloverWilsonHasenbuschTwistAction(
+                    latt_info, row["mass"], 0.0, *common,
+                    md_tol=row.get("md_tol", row["tol"]),
+                    action_tol=row.get("action_tol", row["tol"]),
+                    constdet=True, determinant_ratio=False, matpc_type="odd_odd",
+                    cancel_force_mode="pc_quda_norm", cancel_sample_scale=1.0,
+                    label=row["id"], solver_accel=solver_accel)
+                # 真正 MatPC 导数不使用早期 Clover 探针的额外归一化。
+                action.quda_norm_force_scale = 1.0
+            elif role == "logdet":
+                action = CloverWilsonLogDetAction(latt_info, row["mass"], row["n_flavor"], *common)
+            else:
+                action = CloverWilsonAction(
+                    latt_info, RationalParam(**row["rational"]), row["mass"], row.get("n_flavor", 1),
+                    *common, use_action_rational=True, matpc_type="odd_odd", multishift_tolerance="uniform")
+            use_double(action)
+        action.label = row["id"]
+        actions[row["id"]] = action
+    inner = HMC(latt_info, [actions[mid] for mid in inner_ids], inner_integrator, **stout.as_hmc_kwargs())
+    hmc = HMC(latt_info, [actions[mid] for mid in outer_ids], outer_integrator, inner, **stout.as_hmc_kwargs())
+    hmc.chroma_sampling_order = [actions[mid] for mid in sampling_ids]
+    return hmc, actions
 
 
 @dataclass(frozen=True)

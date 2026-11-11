@@ -5,8 +5,9 @@ import numpy
 
 from pyquda_comm import getLogger
 from ..field import LatticeInfo, LatticeGauge, LatticeMom, LatticeFermion, MultiLatticeFermion
-from ..quda import MatQuda, computeCloverForceV2Quda, computeCloverForceQuda, loadCloverQuda, loadGaugeQuda
+from ..quda import MatQuda, computeCloverForceV2Quda, computeCloverForceQuda, loadCloverQuda, loadGaugeQuda, invertMultiShiftQuda
 from ..enum_quda import (
+    QUDA_MAX_MULTI_SHIFT,
     QudaDagType,
     QudaInverterType,
     QudaMassNormalization,
@@ -43,7 +44,12 @@ class CloverWilsonAction(FermionAction):
         clover_csw: float,
         use_action_rational: bool = False,
         matpc_type: str = "even_even_asymmetric",
+        multishift_tolerance: str = "residue",
     ) -> None:
+        # residue 保持原生行为；uniform 对齐 Chroma 对每个极点的同一残差要求。
+        if multishift_tolerance not in ("residue", "uniform"):
+            raise ValueError("multishift_tolerance must be residue or uniform")
+        self.multishift_tolerance = multishift_tolerance
         # 在创建 Dirac/GPU 场之前拒绝尚无完整 determinant 实现的组合。
         if matpc_type == "even_even":
             raise NotImplementedError("symmetric even_even Clover action/force is not implemented")
@@ -117,6 +123,31 @@ class CloverWilsonAction(FermionAction):
     def updateClover(self):
         loadGaugeQuda(nullptr, self.gauge_param)
         loadCloverQuda(nullptr_clover, nullptr_clover, self.invert_param)
+
+    def invertMultiShift(self, mode):
+        """显式选择逐极点残差策略；采样源为 eta，action/force 源为 phi。"""
+        if mode not in ("sample", "action", "force"):
+            raise ValueError("unknown rational approximation mode")
+        offsets = list(getattr(self.rational_param, "offset_" + mode))
+        residues = list(getattr(self.rational_param, "residue_" + mode))
+        if not offsets or len(offsets) != len(residues) or len(offsets) > QUDA_MAX_MULTI_SHIFT:
+            raise ValueError("invalid rational pole/residue count")
+        if getattr(self, "multishift_tolerance", "residue") != "uniform" or len(offsets) == 1:
+            return super().invertMultiShift(mode)
+        param = self.invert_param
+        n = len(offsets)
+        param.num_offset = n
+        param.offset = offsets + [0.0] * (QUDA_MAX_MULTI_SHIFT - n)
+        param.residue = residues + [0.0] * (QUDA_MAX_MULTI_SHIFT - n)
+        param.tol_offset = [param.tol] * n + [0.0] * (QUDA_MAX_MULTI_SHIFT - n)
+        source = self.eta if mode == "sample" else self.phi
+        invertMultiShiftQuda(self.quark.even_ptrs, source.even_ptr, param)
+        self.dirac.performance()
+        if mode in ("sample", "action"):
+            target = self.phi if mode == "sample" else self.eta
+            target.even = getattr(self.rational_param, "norm_" + mode) * source.even
+            for index, residue in enumerate(residues):
+                target.even += residue * self.quark[index].even
 
     def sample(self):
         self.sampleEta()

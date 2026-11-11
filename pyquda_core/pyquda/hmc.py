@@ -1,4 +1,7 @@
+"""HMC 积分与 resident 场生命周期；FG 异常恢复规范场及动量，管理可选 MG 资源。"""
+
 from abc import ABC, abstractmethod
+from contextlib import ExitStack
 from math import exp
 from random import Random
 from typing import List, Optional, Union
@@ -539,6 +542,9 @@ class HMC:
     def fermionForce(self, dt: float):
         self.loadGaugeMomSmeared()
         for monomial in self.fermion_monomials:
+            accel = getattr(monomial, "solver_accel", None)
+            if accel is not None:
+                accel.operator_context = self.stout_config
             # 各 action 的 V2 接口对 dt 的历史处理不一致：普通 Clover 会在
             # QUDA 内部缩放，Hasenbusch/logdet 则返回未缩放导数。统一要求这里
             # 先累计 dS/dV，再在 stout reverse 前只乘一次真实积分步长。
@@ -563,17 +569,70 @@ class HMC:
         self.saveGauge(gauge_saved)
         self.saveMom(mom_saved)
 
-        # P=0 后先生成 shifted gauge U'=exp(shifted_force_dt*F[U])U。
-        self.loadMom(LatticeMom(self.latt_info))
-        self.updateMom(shifted_force_dt)
-        self.updateGauge(1.0)
+        # 所有嵌套时间尺度同时冻结；临时场只允许复用已有正常场 MG 基。
+        with ExitStack() as stack:
+            for accel in self._solverAccelerators():
+                stack.enter_context(accel.suspended())
+            try:
+                self.loadMom(LatticeMom(self.latt_info))
+                self.updateMom(shifted_force_dt)
+                self.updateGauge(1.0)
+                self.loadMom(mom_saved)
+                self.updateMom(momentum_dt)
+            except BaseException:
+                self.loadMom(mom_saved)
+                raise
+            finally:
+                # 成功保留新动量；失败恢复原动量；两种情况均恢复规范场。
+                try:
+                    self.loadGauge(gauge_saved)
+                except BaseException as gauge_error:
+                    # 恢复 gauge 失败也要尝试回滚动量；双重失败保留 gauge 异常及原因链。
+                    try:
+                        self.loadMom(mom_saved)
+                    except BaseException as momentum_error:
+                        raise gauge_error from momentum_error
+                    raise
 
-        # 在 U' 上把当前层 force 累加到原动量，再恢复 U；pseudofermion 保持不变。
-        self.loadMom(mom_saved)
-        self.updateMom(momentum_dt)
-        self.loadGauge(gauge_saved)
+    def _solverAccelerators(self):
+        """遍历当前及嵌套层，绑定各自的物理 stout 上下文；聚合 manager 自行转发。"""
+        seen = set()
+        current = self
+        while current is not None:
+            for monomial in current.fermion_monomials:
+                accel = getattr(monomial, "solver_accel", None)
+                if accel is not None and id(accel) not in seen:
+                    seen.add(id(accel))
+                    accel.operator_context = current.stout_config
+                    yield accel
+            current = current.hmc_inner
+
+    def configureSolverAccel(self, config=None):
+        """actions 构造后、首次求解前配置；scalar 聚合 manager 必须转发 configure。"""
+        from .solver_accel import SolverAccelConfig
+
+        config = SolverAccelConfig.from_dict(config)
+        for accel in self._solverAccelerators():
+            accel.configure(config)
+
+    def invalidateSolverAccel(self, reason="operator change"):
+        for accel in self._solverAccelerators():
+            accel.invalidate(reason)
+
+    def beginTrajectory(self, trajectory=None):
+        """轨迹边界置脏 MG；只更新可选证据的轨迹编号，不消耗物理 RNG。"""
+        from .solver_accel import set_solver_accel_trajectory
+
+        set_solver_accel_trajectory(trajectory)
+        self.invalidateSolverAccel("trajectory start")
+
+    def closeSolverAccel(self):
+        """显式释放本层及嵌套层的共享池引用，最后一个借用者销毁 MG。"""
+        for accel in self._solverAccelerators():
+            accel.close()
 
     def loadGauge(self, gauge: LatticeGauge):
+        self.invalidateSolverAccel("gauge replacement")
         gauge_in = gauge.copy()
         if self.is_staggered:
             gauge_in.staggeredPhase(False)
@@ -633,7 +692,10 @@ class HMC:
             self.projectSU3(project_tol)
 
     def accept(self, delta_s: float):
-        return getMPIComm().bcast(self.random.random() < exp(min(-delta_s, 0)))
+        accepted = getMPIComm().bcast(self.random.random() < exp(min(-delta_s, 0)))
+        if not accepted:
+            self.invalidateSolverAccel("trajectory rejected")
+        return accepted
 
     def plaquette(self):
         self.obs_param.compute_plaquette = QudaBoolean.QUDA_BOOLEAN_TRUE
